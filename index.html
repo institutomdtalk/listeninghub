@@ -792,7 +792,10 @@ function renderAll() {
 
   const groups = {};
   filtered.forEach(a => { (groups[a.category] = groups[a.category]||[]).push(a); });
-  const sorted = CAT_ORDER.filter(c => groups[c]);
+  // Include any unknown categories not in CAT_ORDER
+  const knownSorted = CAT_ORDER.filter(c => groups[c]);
+  const unknownSorted = Object.keys(groups).filter(c => !CAT_ORDER.includes(c));
+  const sorted = [...knownSorted, ...unknownSorted];
 
   main.innerHTML = sorted.map(cat => {
     const items = groups[cat];
@@ -915,13 +918,22 @@ function extractDriveId(raw) {
 }
 
 function normCategory(raw) {
-  if (!raw) return 'regular';
+  if (!raw) return 'medical';
   const v = raw.trim().toLowerCase();
-  if (v === 'medical'  || v.includes('medic')) return 'medical';
-  if (v === 'business' || v.includes('busi'))  return 'business';
-  if (v === 'regular'  || v.includes('reg'))   return 'regular';
-  // Unknown value — keep as-is so it still shows up under its own label
-  return v;
+  if (v === 'medical'  || v.includes('medic') || v.includes('neuro') ||
+      v.includes('cardio') || v.includes('onco') || v.includes('pedia') ||
+      v.includes('psych') || v.includes('surg') || v.includes('clini') ||
+      v.includes('health') || v.includes('pharm') || v.includes('anat') ||
+      v.includes('physio') || v.includes('patho') || v.includes('radio'))
+    return 'medical';
+  if (v === 'business' || v.includes('busi') || v.includes('corpo') ||
+      v.includes('finan') || v.includes('market') || v.includes('manage'))
+    return 'business';
+  if (v === 'regular'  || v.includes('reg') || v.includes('general') ||
+      v.includes('every') || v.includes('daily') || v.includes('convers'))
+    return 'regular';
+  // Default: medical (most common for MD Talk)
+  return 'medical';
 }
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
