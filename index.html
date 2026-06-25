@@ -946,12 +946,12 @@ function attachEvents() {
 function extractDriveId(raw) {
   if (!raw) return '';
   raw = raw.trim();
-  // Already a clean ID (no slashes or ?): return as-is
-  if (!/[/?]/.test(raw)) return raw;
-  // /file/d/ID/view  or  /file/d/ID/preview
+  // Already a clean ID (no slashes, ? or &): return as-is
+  if (!/[/?&]/.test(raw)) return raw;
+  // /file/d/ID/  or  /file/d/ID?  or  /file/d/ID&
   let m = raw.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
   if (m) return m[1];
-  // ?id=ID  or  open?id=ID
+  // ?id=ID or &id=ID — stop at & or end
   m = raw.match(/[?&]id=([a-zA-Z0-9_-]+)/);
   if (m) return m[1];
   // /d/ID/
