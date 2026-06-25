@@ -224,18 +224,74 @@ body {
   flex-shrink: 0;
 }
 
-/* ─── DRIVE AUDIO PLAYER ─── */
-.card-player-section {
-  padding: .75rem 1.5rem 1rem;
+/* ─── CUSTOM PLAYER ─── */
+.card-player-section { padding: .75rem 1.5rem 1rem; }
+.custom-player {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  background: rgba(11,29,58,.06);
+  border: 1px solid rgba(11,29,58,.1);
+  border-radius: 10px;
+  padding: .65rem 1rem;
 }
-.drive-audio-player {
-  width: 100%;
-  height: 46px;
-  border: none;
-  border-radius: 8px;
-  display: block;
+.cp-btn {
+  flex-shrink: 0;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--navy);
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, transform .15s;
+  box-shadow: 0 2px 8px rgba(11,29,58,.25);
+}
+.cp-btn:hover { background: var(--navy-light); transform: scale(1.07); }
+.cp-btn:active { transform: scale(.95); }
+.cp-btn svg { width: 14px; height: 14px; }
+.cp-center { flex: 1; display: flex; flex-direction: column; gap: .4rem; }
+.cp-track {
+  position: relative; height: 4px;
+  background: rgba(11,29,58,.12);
+  border-radius: 100px; cursor: pointer;
+}
+.cp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--navy), var(--navy-light));
+  border-radius: 100px; width: 0%;
+  transition: width .1s linear; pointer-events: none;
+}
+.cp-thumb {
+  position: absolute; top: 50%; left: 0%;
+  transform: translate(-50%,-50%);
+  width: 12px; height: 12px;
+  background: var(--navy); border: 2px solid #fff;
+  border-radius: 50%; pointer-events: none;
+  opacity: 0; transition: opacity .15s;
+}
+.cp-track:hover .cp-thumb { opacity: 1; }
+.cp-foot {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: .5rem;
+}
+.cp-time {
+  font-size: .63rem; font-weight: 500;
+  color: var(--text-muted); letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+}
+.cp-status {
+  font-size: .62rem; color: var(--text-muted);
+  font-style: italic; flex: 1; text-align: center;
+}
+.cp-spd {
+  font-family: 'Raleway', sans-serif;
+  font-size: .6rem; font-weight: 700;
+  letter-spacing: .08em; color: var(--text-muted);
   background: transparent;
+  border: 1px solid rgba(11,29,58,.15);
+  border-radius: 4px; padding: .1rem .4rem;
+  cursor: pointer; transition: all .15s;
 }
+.cp-spd:hover { border-color: var(--navy); color: var(--navy); }
 
 /* ─── CARD FOOTER ACTIONS ─── */
 .card-footer {
@@ -883,13 +939,24 @@ function cardHTML(a, idx) {
       ${a.description ? `<p class="card-desc">${esc(a.description)}</p>` : ''}
 
       <div class="card-player-section">
-        <iframe
-          src="https://drive.google.com/file/d/${a.drive_file_id}/preview"
-          class="drive-audio-player"
-          allow="autoplay"
-          allowfullscreen
-          loading="lazy"
-        ></iframe>
+        <div class="custom-player" id="player_${id}">
+          <button class="cp-btn" onclick="cpPlay(this, '${a.drive_file_id}', 'player_${id}')" aria-label="Play">
+            <svg class="cp-play" viewBox="0 0 24 24" fill="var(--gold)"><polygon points="5,3 19,12 5,21"/></svg>
+            <svg class="cp-pause" viewBox="0 0 24 24" fill="var(--gold)" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          </button>
+          <div class="cp-center">
+            <div class="cp-track" onclick="cpSeekClick(this)">
+              <div class="cp-fill"></div>
+              <div class="cp-thumb"></div>
+            </div>
+            <div class="cp-foot">
+              <span class="cp-time">0:00 / 0:00</span>
+              <span class="cp-status">Click play to load</span>
+              <button class="cp-spd" onclick="cpSpeedClick(this)">1×</button>
+            </div>
+          </div>
+        </div>
+        <audio id="aud_${id}" preload="none" style="display:none"></audio>
       </div>
 
       <div class="card-footer">
@@ -1105,6 +1172,112 @@ Always respond in English.`;
   }
 }
 
+
+
+/* ══════════════════════════════════════════
+   CUSTOM PLAYER JS
+══════════════════════════════════════════ */
+const CP_SPEEDS = [1, 1.25, 1.5, 0.75];
+const CP_LOADING = {};
+
+async function cpPlay(btn, fileId, playerId) {
+  const player = document.getElementById(playerId);
+  const audId  = 'aud_' + playerId.replace('player_','');
+  let aud = document.getElementById(audId);
+  if (!aud) return;
+
+  // If already playing this one — pause
+  if (!aud.paused) {
+    aud.pause();
+    btn.querySelector('.cp-play').style.display  = 'block';
+    btn.querySelector('.cp-pause').style.display = 'none';
+    return;
+  }
+
+  // Pause all other players
+  document.querySelectorAll('audio').forEach(a => {
+    if (a !== aud && !a.paused) {
+      a.pause();
+      const otherBtn = a.closest('.card-collapsible')?.querySelector('.cp-btn');
+      if (otherBtn) {
+        otherBtn.querySelector('.cp-play').style.display  = 'block';
+        otherBtn.querySelector('.cp-pause').style.display = 'none';
+      }
+    }
+  });
+
+  const status = player.querySelector('.cp-status');
+
+  // First time loading — set src
+  if (!aud.src || aud.src === window.location.href) {
+    status.textContent = 'Loading…';
+    // Try direct Drive usercontent URL
+    const url = 'https://drive.usercontent.google.com/download?id=' + fileId + '&export=download&authuser=0';
+    aud.src = url;
+    aud.load();
+  }
+
+  try {
+    await aud.play();
+    btn.querySelector('.cp-play').style.display  = 'none';
+    btn.querySelector('.cp-pause').style.display = 'block';
+    status.textContent = '';
+  } catch(e) {
+    status.textContent = 'Could not load audio';
+    console.warn('Audio play error:', e);
+  }
+
+  // Bind events once
+  if (!aud._bound) {
+    aud._bound = true;
+    const track  = player.querySelector('.cp-track');
+    const fill   = player.querySelector('.cp-fill');
+    const thumb  = player.querySelector('.cp-thumb');
+    const timeEl = player.querySelector('.cp-time');
+
+    aud.addEventListener('timeupdate', () => {
+      const pct = aud.duration ? (aud.currentTime / aud.duration) * 100 : 0;
+      fill.style.width  = pct + '%';
+      thumb.style.left  = pct + '%';
+      timeEl.textContent = cpFmt(aud.currentTime) + ' / ' + cpFmt(aud.duration || 0);
+    });
+    aud.addEventListener('ended', () => {
+      btn.querySelector('.cp-play').style.display  = 'block';
+      btn.querySelector('.cp-pause').style.display = 'none';
+    });
+    aud.addEventListener('error', () => {
+      status.textContent = 'Audio unavailable — check file permissions';
+    });
+  }
+}
+
+function cpSeekClick(track) {
+  // find audio in same player
+  const player = track.closest('.custom-player');
+  const section = player.closest('.card-player-section');
+  const aud = section.querySelector('audio');
+  if (!aud || !aud.duration) return;
+  const rect = track.getBoundingClientRect();
+  const pct  = (event.clientX - rect.left) / rect.width;
+  aud.currentTime = pct * aud.duration;
+}
+
+function cpSpeedClick(btn) {
+  const player = btn.closest('.custom-player');
+  const section = player.closest('.card-player-section');
+  const aud = section.querySelector('audio');
+  if (!aud) return;
+  const speeds = [1, 1.25, 1.5, 0.75];
+  const cur = parseFloat(btn.textContent) || 1;
+  const idx = (speeds.indexOf(cur) + 1) % speeds.length;
+  aud.playbackRate = speeds[idx];
+  btn.textContent  = speeds[idx] + '×';
+}
+
+function cpFmt(s) {
+  if (!s || isNaN(s)) return '0:00';
+  return Math.floor(s/60) + ':' + String(Math.floor(s%60)).padStart(2,'0');
+}
 
 loadAudios();
 </script>
