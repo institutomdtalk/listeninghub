@@ -763,6 +763,66 @@ body {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+/* ─── FLOATING AI BUTTON ─── */
+.fab-ai {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 2rem;
+  z-index: 150;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  border: 1.5px solid var(--gold);
+  box-shadow: 0 4px 20px rgba(5,13,26,.45), 0 0 0 0 rgba(196,164,90,.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .2s ease, box-shadow .2s ease;
+  animation: fabPulse 3s ease-in-out infinite;
+}
+.fab-ai:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 28px rgba(5,13,26,.55), 0 0 0 6px rgba(196,164,90,.15);
+  animation: none;
+}
+.fab-ai:active { transform: scale(.95); }
+.fab-ai svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--gold);
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.fab-ai-tooltip {
+  position: fixed;
+  right: 4.5rem;
+  bottom: 2.65rem;
+  z-index: 149;
+  background: var(--navy-deep);
+  border: 1px solid rgba(196,164,90,.25);
+  color: var(--gold-pale);
+  font-family: 'Raleway', sans-serif;
+  font-size: .68rem;
+  font-weight: 500;
+  letter-spacing: .06em;
+  padding: .38rem .85rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease;
+}
+.fab-ai:hover + .fab-ai-tooltip,
+.fab-ai-tooltip.show { opacity: 1; }
+@keyframes fabPulse {
+  0%,100% { box-shadow: 0 4px 20px rgba(5,13,26,.45), 0 0 0 0 rgba(196,164,90,.4); }
+  50%      { box-shadow: 0 4px 20px rgba(5,13,26,.45), 0 0 0 8px rgba(196,164,90,.0); }
+}
 </style>
 </head>
 <body>
@@ -1315,6 +1375,17 @@ loadAudios();
   </div>
 </div>
 
+
+<!-- FLOATING AI BUTTON -->
+<button class="fab-ai" onclick="openVocabModal('medical')" aria-label="Vocabulary AI">
+  <svg viewBox="0 0 24 24">
+    <path d="M12 2a8 8 0 0 1 8 8c0 3.5-2 6.5-5 7.9V20a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2.1C6 16.5 4 13.5 4 10a8 8 0 0 1 8-8z"/>
+    <line x1="9"  y1="10" x2="9.01"  y2="10"/>
+    <line x1="12" y1="10" x2="12.01" y2="10"/>
+    <line x1="15" y1="10" x2="15.01" y2="10"/>
+  </svg>
+</button>
+<span class="fab-ai-tooltip">Vocabulary AI</span>
 </div><!-- /pageContent -->
 </body>
 </html>
