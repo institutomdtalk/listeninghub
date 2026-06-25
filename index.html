@@ -787,7 +787,7 @@ async function loadAudios() {
     main.innerHTML = '<div class="state-container"><div class="spinner"></div><p class="state-text">Connecting to library…</p></div>';
     const url = SHEET_URL + '?type=audios&t=' + Date.now();
     const res = await fetch(url);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+    if (!res.ok) throw new Error('HTTP ' + res.status + ' — check Apps Script deployment');
     const text = await res.text();
     let data;
     try { data = JSON.parse(text); }
@@ -1087,16 +1087,8 @@ Keep responses concise and practical. If it's a common phrase or idiom, explain 
 Always respond in English.`;
 
   try {
-    const res = await fetch('https://script.google.com/macros/s/AKfycbxAjBvDp7lCOOVbtyJaoiRulKf0GoDFgsLZj4W6Rc6kLawC4ITZSwXzsBVsd17hZd6Bbw/exec', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        type: 'vocab',
-        query: query,
-        system: systemPrompt
-      })
-    });
-
+    const vocabUrl = SHEET_URL + '?type=vocab&query=' + encodeURIComponent(query) + '&system=' + encodeURIComponent(systemPrompt);
+    const res = await fetch(vocabUrl);
     const data = await res.json();
     removeThinking();
 
@@ -1135,6 +1127,7 @@ loadAudios();
     </div>
   </div>
 </div>
-</div>
+
+</div><!-- /pageContent -->
 </body>
 </html>
