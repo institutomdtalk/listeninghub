@@ -786,7 +786,13 @@ async function loadAudios() {
   try {
     main.innerHTML = '<div class="state-container"><div class="spinner"></div><p class="state-text">Connecting to library…</p></div>';
     const url = SHEET_URL + '?type=audios&t=' + Date.now();
-    const res = await fetch(url);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 12000);
+    const res = await fetch(url, { signal: controller.signal }).catch(err => {
+      clearTimeout(timeout);
+      throw new Error('Network failed: ' + err.message);
+    });
+    clearTimeout(timeout);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const text = await res.text();
     let data;
@@ -809,8 +815,10 @@ async function loadAudios() {
     main.innerHTML = `
       <div class="state-container">
         <div class="empty-glyph">&#9671;</div>
-        <p class="state-text" style="font-size:.8rem;max-width:600px;margin:0 auto;word-break:break-all;">
-          <strong style="color:#c4614a">Error:</strong> ${err.message}
+        <p class="state-text" style="font-size:.78rem;max-width:580px;margin:.5rem auto 0;line-height:1.7;word-break:break-word;">
+          <strong style="color:#c4614a;display:block;margin-bottom:.4rem;">Could not load audio library</strong>
+          ${err.message}<br><br>
+          <span style="opacity:.6;font-size:.7rem">Check that the Apps Script is published as a Web App with access set to <em>Anyone</em>, then reload the page.</span>
         </p>
       </div>`;
     console.error('Listening Hub load error:', err);
