@@ -333,15 +333,16 @@ body {
   flex-shrink: 0;
 }
 
-/* ─── DRIVE IFRAME PLAYER ─── */
+/* ─── AUDIO PLAYER ─── */
 .card-player-section {
-  padding: .75rem 1.5rem 1rem;
+  padding: .85rem 1.5rem 1.1rem;
 }
-.drive-player {
+.native-player {
   width: 100%;
-  height: 50px;
-  border: none;
+  height: 40px;
   border-radius: 6px;
+  outline: none;
+  accent-color: var(--navy);
   display: block;
 }
 
@@ -820,7 +821,7 @@ function renderAll() {
 ══════════════════════════════════════════════ */
 function cardHTML(a, idx) {
   const id = 'c_' + esc(a.title).replace(/[^a-z0-9]/gi,'').slice(0,20) + idx;
-  const embedSrc = `https://drive.google.com/file/d/${a.drive_file_id}/preview`;
+  const audioSrc = SHEET_URL + '?type=audio&id=' + a.drive_file_id;
   const hasTx = !!(a.transcript && a.transcript.trim());
 
 
@@ -837,14 +838,10 @@ function cardHTML(a, idx) {
       ${a.description ? `<p class="card-desc">${esc(a.description)}</p>` : ''}
 
       <div class="card-player-section">
-        <iframe
-          src="${embedSrc}"
-          class="drive-player"
-          allow="autoplay"
-          loading="lazy"
-          frameborder="0"
-          allowfullscreen
-        ></iframe>
+        <audio class="native-player" controls controlsList="nodownload" preload="none">
+          <source src="${audioSrc}" type="audio/mpeg">
+          Your browser does not support audio playback.
+        </audio>
       </div>
 
       <div class="card-footer">
