@@ -711,7 +711,14 @@ async function loadAudios() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    allAudios = data.filter(r => r.category && r.title && r.drive_file_id);
+    allAudios = data
+      .filter(r => r.title && r.drive_file_id)
+      .map(r => ({
+        ...r,
+        drive_file_id: extractDriveId(r.drive_file_id),
+        category: normCategory(r.category),
+      }))
+      .filter(r => r.drive_file_id);
     buildPills();
     renderAll();
   } catch (err) {
@@ -781,7 +788,7 @@ function renderAll() {
     const items = groups[cat];
     return `<section class="level-section" data-reveal>
       <div class="level-heading">
-        <span class="level-code">${CAT_LABELS[cat]||cat}</span>
+        <span class="level-code">${CAT_LABELS[cat] || cat.charAt(0).toUpperCase()+cat.slice(1)}</span>
         <div class="level-info">
           <span class="level-count">${items.length} track${items.length!==1?'s':''}</span>
         </div>
@@ -882,6 +889,32 @@ function attachEvents() {
 /* ══════════════════════════════════════════════
    UTILS
 ══════════════════════════════════════════════ */
+function extractDriveId(raw) {
+  if (!raw) return '';
+  raw = raw.trim();
+  // Already a clean ID (no slashes or ?): return as-is
+  if (!/[/?]/.test(raw)) return raw;
+  // /file/d/ID/view  or  /file/d/ID/preview
+  let m = raw.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+  if (m) return m[1];
+  // ?id=ID  or  open?id=ID
+  m = raw.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (m) return m[1];
+  // /d/ID/
+  m = raw.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (m) return m[1];
+  return raw;
+}
+
+function normCategory(raw) {
+  if (!raw) return 'regular';
+  const v = raw.trim().toLowerCase();
+  if (v === 'medical'  || v.includes('medic')) return 'medical';
+  if (v === 'business' || v.includes('busi'))  return 'business';
+  if (v === 'regular'  || v.includes('reg'))   return 'regular';
+  // Unknown value — keep as-is so it still shows up under its own label
+  return v;
+}
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
