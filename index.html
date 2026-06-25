@@ -1179,7 +1179,8 @@ Keep responses concise and practical. If it's a common phrase or idiom, explain 
 Always respond in English.`;
 
   try {
-    const vocabUrl = SHEET_URL + '?type=vocab&query=' + encodeURIComponent(query) + '&system=' + encodeURIComponent(systemPrompt);
+    // system prompt is hardcoded in Apps Script defaultSystem() — no need to send it
+    const vocabUrl = SHEET_URL + '?type=vocab&query=' + encodeURIComponent(query) + '&cat=' + encodeURIComponent(catLabel);
     const res = await fetch(vocabUrl);
     const data = await res.json();
     removeThinking();
