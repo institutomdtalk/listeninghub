@@ -786,13 +786,7 @@ async function loadAudios() {
   try {
     main.innerHTML = '<div class="state-container"><div class="spinner"></div><p class="state-text">Connecting to library…</p></div>';
     const url = SHEET_URL + '?type=audios&t=' + Date.now();
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 12000);
-    const res = await fetch(url, { signal: controller.signal }).catch(err => {
-      clearTimeout(timeout);
-      throw new Error('Network failed: ' + err.message);
-    });
-    clearTimeout(timeout);
+    const res = await fetch(url);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const text = await res.text();
     let data;
@@ -1005,10 +999,16 @@ function observeReveal() {
 ══════════════════════════════════════════════ */
 let vocabCategory = '';
 
+let vocabInputListenerAttached = false;
 function openVocabModal(cat) {
   vocabCategory = cat;
   document.getElementById('vocabOverlay').classList.add('open');
-  document.getElementById('vocabInput').focus();
+  const inp = document.getElementById('vocabInput');
+  inp.focus();
+  if (!vocabInputListenerAttached) {
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') sendVocabQuery(); });
+    vocabInputListenerAttached = true;
+  }
   const chat = document.getElementById('vocabChat');
   if (!chat.innerHTML) {
     addAiMsg("Hello! I'm your Vocabulary AI. Type any word or expression you heard in the audio and I'll explain its meaning, clinical usage, and give you examples in context.");
@@ -1027,9 +1027,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeVocabModal();
 });
 
-document.getElementById('vocabInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') sendVocabQuery();
-});
+// vocabInput listener attached on modal open (element may not exist at parse time)
 
 function addUserMsg(text) {
   const chat = document.getElementById('vocabChat');
