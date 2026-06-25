@@ -99,90 +99,7 @@ body {
   background: linear-gradient(90deg, var(--gold) 0%, rgba(196,164,90,.25) 60%, transparent 100%);
 }
 
-/* ─── CONTROLS BAR ─── */
-.controls-bar {
-  position: relative;
-  z-index: 20;
-  max-width: 980px;
-  margin: 1.8rem auto 0;
-  padding: 0 3rem;
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  flex-wrap: wrap;
-}
-.controls-search {
-  flex: 1;
-  min-width: 200px;
-  max-width: 320px;
-  position: relative;
-}
-.controls-search svg {
-  position: absolute;
-  left: .85rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 14px;
-  height: 14px;
-  stroke: var(--text-muted);
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-}
-.search-input {
-  width: 100%;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-family: 'Raleway', sans-serif;
-  font-size: .76rem;
-  font-weight: 400;
-  padding: .6rem .9rem .6rem 2.4rem;
-  border-radius: 8px;
-  outline: none;
-  transition: border-color .2s, background .2s;
-  letter-spacing: .03em;
-}
-.search-input::placeholder { color: var(--text-muted); }
-.search-input:focus {
-  border-color: var(--gold);
-  background: var(--bg-open);
-}
-.filter-pills {
-  display: flex;
-  gap: .45rem;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.filter-sep {
-  width: 1px;
-  height: 20px;
-  background: var(--border-gold);
-}
-.pill {
-  background: transparent;
-  border: 1px solid var(--border-gold);
-  color: var(--text-muted);
-  font-family: 'Raleway', sans-serif;
-  font-size: .67rem;
-  font-weight: 600;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  padding: .38rem .85rem;
-  border-radius: 100px;
-  cursor: pointer;
-  transition: all .2s ease;
-}
-.pill:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-  background: rgba(196,164,90,.07);
-}
-.pill.active {
-  background: var(--navy);
-  border-color: var(--navy);
-  color: var(--gold-pale);
-}
+
 
 /* ─── MAIN ─── */
 .main {
@@ -586,7 +503,7 @@ body {
 
 /* ─── MOBILE ─── */
 @media (max-width: 620px) {
-  .site-header, .controls-bar, .main { padding-left: 1.25rem; padding-right: 1.25rem; }
+  .site-header, .main { padding-left: 1.25rem; padding-right: 1.25rem; }
   .card-footer { flex-direction: column; }
   .btn-expand { width: 100%; justify-content: center; }
   .answer-row { flex-direction: column; align-items: stretch; }
@@ -615,7 +532,7 @@ body {
 #bgDim {
   position: absolute;
   inset: 0;
-  background: rgba(5,13,26,.60);
+  background: rgba(5,13,26,.45);
 }
 
 #pageContent {
@@ -645,17 +562,7 @@ body {
   <div class="header-rule"></div>
 </header>
 
-<!-- CONTROLS -->
-<div class="controls-bar">
-  <div class="controls-search">
-    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input class="search-input" id="searchInput" type="text" placeholder="Search by title or topic…" autocomplete="off">
-  </div>
-  <span class="filter-sep"></span>
-  <div class="filter-pills" id="filterPills">
-    <button class="pill active" data-filter="all">All</button>
-  </div>
-</div>
+
 
 <!-- MAIN -->
 <main class="main" id="mainContent">
@@ -742,44 +649,13 @@ async function loadAudios() {
   }
 }
 
-/* ══════════════════════════════════════════════
-   PILLS
-══════════════════════════════════════════════ */
-function buildPills() {
-  const pills = document.getElementById('filterPills');
-  const cats = CAT_ORDER.filter(c => allAudios.some(a => a.category === c));
-  pills.querySelectorAll('[data-filter]:not([data-filter="all"])').forEach(b => b.remove());
-  cats.forEach(cat => {
-    const btn = document.createElement('button');
-    btn.className = 'pill';
-    btn.dataset.filter = cat;
-    btn.textContent = CAT_LABELS[cat] || cat;
-    btn.addEventListener('click', () => setFilter(cat));
-    pills.appendChild(btn);
-  });
-}
-
-function setFilter(v) {
-  activeFilter = v;
-  document.querySelectorAll('.pill').forEach(b =>
-    b.classList.toggle('active', b.dataset.filter === v));
-  renderAll();
-}
-document.querySelector('[data-filter="all"]').addEventListener('click', () => setFilter('all'));
-document.getElementById('searchInput').addEventListener('input', () => renderAll());
+function buildPills() { /* filters removed */ }
 
 /* ══════════════════════════════════════════════
    RENDER
 ══════════════════════════════════════════════ */
 function renderAll() {
-  const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  const filtered = allAudios.filter(a => {
-    const lm = activeFilter === 'all' || a.category === activeFilter;
-    const qm = !q || a.title.toLowerCase().includes(q)
-      || (a.description||'').toLowerCase().includes(q)
-      || (a.transcript||'').toLowerCase().includes(q);
-    return lm && qm;
-  });
+  const filtered = allAudios;
 
   const main = document.getElementById('mainContent');
 
