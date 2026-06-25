@@ -1222,11 +1222,14 @@ async function cpPlay(btn, fileId, playerId) {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const json = await res.json();
     if (json.error) throw new Error(json.error);
+    if (!json.b64)  throw new Error('No audio data received');
+    console.log('Audio received:', json.name, '| mime:', json.mime, '| b64 length:', json.b64.length);
     // Decode base64 → Uint8Array → Blob → blob URL
     const binary = atob(json.b64);
     const bytes  = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
     const blob    = new Blob([bytes], { type: json.mime || 'audio/mpeg' });
+    console.log('Blob created:', blob.size, 'bytes, type:', blob.type);
     const blobUrl = URL.createObjectURL(blob);
     aud.src = blobUrl;
     aud._loaded = true;
