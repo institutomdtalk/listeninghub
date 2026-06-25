@@ -1183,71 +1183,78 @@ const CP_LOADING = {};
 async function cpPlay(btn, fileId, playerId) {
   const player = document.getElementById(playerId);
   const audId  = 'aud_' + playerId.replace('player_','');
-  let aud = document.getElementById(audId);
+  const aud    = document.getElementById(audId);
   if (!aud) return;
+  const status = player.querySelector('.cp-status');
 
-  // If already playing this one — pause
-  if (!aud.paused) {
+  // Pause all others
+  document.querySelectorAll('audio').forEach(a => {
+    if (a !== aud && !a.paused) {
+      a.pause();
+      const ob = a.closest('.card-player-section')?.querySelector('.cp-btn');
+      if (ob) { ob.querySelector('.cp-play').style.display='block'; ob.querySelector('.cp-pause').style.display='none'; }
+    }
+  });
+
+  // If already loaded and playing — pause
+  if (aud._loaded && !aud.paused) {
     aud.pause();
     btn.querySelector('.cp-play').style.display  = 'block';
     btn.querySelector('.cp-pause').style.display = 'none';
     return;
   }
 
-  // Pause all other players
-  document.querySelectorAll('audio').forEach(a => {
-    if (a !== aud && !a.paused) {
-      a.pause();
-      const otherBtn = a.closest('.card-collapsible')?.querySelector('.cp-btn');
-      if (otherBtn) {
-        otherBtn.querySelector('.cp-play').style.display  = 'block';
-        otherBtn.querySelector('.cp-pause').style.display = 'none';
-      }
-    }
-  });
-
-  const status = player.querySelector('.cp-status');
-
-  // First time loading — set src
-  if (!aud.src || aud.src === window.location.href) {
-    status.textContent = 'Loading…';
-    // Try direct Drive usercontent URL
-    const url = 'https://drive.usercontent.google.com/download?id=' + fileId + '&export=download&authuser=0';
-    aud.src = url;
-    aud.load();
-  }
-
-  try {
-    await aud.play();
+  // If already loaded — just play
+  if (aud._loaded) {
+    aud.play();
     btn.querySelector('.cp-play').style.display  = 'none';
     btn.querySelector('.cp-pause').style.display = 'block';
-    status.textContent = '';
-  } catch(e) {
-    status.textContent = 'Could not load audio';
-    console.warn('Audio play error:', e);
+    return;
   }
 
-  // Bind events once
-  if (!aud._bound) {
-    aud._bound = true;
-    const track  = player.querySelector('.cp-track');
+  // First time: fetch as blob via Apps Script proxy then create blob URL
+  status.textContent = 'Loading…';
+  btn.disabled = true;
+
+  try {
+    const proxyUrl = SHEET_URL + '?type=audioblob&id=' + fileId;
+    const res  = await fetch(proxyUrl);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    if (json.error) throw new Error(json.error);
+    // Decode base64 → Uint8Array → Blob → blob URL
+    const binary = atob(json.b64);
+    const bytes  = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    const blob    = new Blob([bytes], { type: json.mime || 'audio/mpeg' });
+    const blobUrl = URL.createObjectURL(blob);
+    aud.src = blobUrl;
+    aud._loaded = true;
+
+    // Bind events once
     const fill   = player.querySelector('.cp-fill');
     const thumb  = player.querySelector('.cp-thumb');
     const timeEl = player.querySelector('.cp-time');
-
     aud.addEventListener('timeupdate', () => {
-      const pct = aud.duration ? (aud.currentTime / aud.duration) * 100 : 0;
-      fill.style.width  = pct + '%';
-      thumb.style.left  = pct + '%';
-      timeEl.textContent = cpFmt(aud.currentTime) + ' / ' + cpFmt(aud.duration || 0);
+      const pct = aud.duration ? (aud.currentTime/aud.duration)*100 : 0;
+      fill.style.width = pct + '%';
+      thumb.style.left = pct + '%';
+      timeEl.textContent = cpFmt(aud.currentTime) + ' / ' + cpFmt(aud.duration||0);
     });
     aud.addEventListener('ended', () => {
       btn.querySelector('.cp-play').style.display  = 'block';
       btn.querySelector('.cp-pause').style.display = 'none';
     });
-    aud.addEventListener('error', () => {
-      status.textContent = 'Audio unavailable — check file permissions';
-    });
+
+    await aud.play();
+    btn.querySelector('.cp-play').style.display  = 'none';
+    btn.querySelector('.cp-pause').style.display = 'block';
+    status.textContent = '';
+  } catch(err) {
+    status.textContent = 'Error: ' + err.message;
+    console.error('Audio load error:', err);
+  } finally {
+    btn.disabled = false;
   }
 }
 
