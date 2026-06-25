@@ -224,94 +224,18 @@ body {
   flex-shrink: 0;
 }
 
-/* ─── CUSTOM AUDIO PLAYER ─── */
+/* ─── DRIVE AUDIO PLAYER ─── */
 .card-player-section {
-  padding: .85rem 1.5rem 1.1rem;
+  padding: .75rem 1.5rem 1rem;
 }
-.custom-player {
-  display: flex;
-  align-items: center;
-  gap: .85rem;
-  background: rgba(11,29,58,.05);
-  border: 1px solid rgba(11,29,58,.1);
-  border-radius: 10px;
-  padding: .7rem 1rem;
-}
-.cp-btn {
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--navy);
+.drive-audio-player {
+  width: 100%;
+  height: 46px;
   border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background .15s, transform .15s;
-  box-shadow: 0 2px 8px rgba(11,29,58,.2);
-}
-.cp-btn:hover { background: var(--navy-light); transform: scale(1.07); }
-.cp-btn:active { transform: scale(.95); }
-.cp-btn svg { width: 14px; height: 14px; fill: var(--gold); flex-shrink: 0; }
-.cp-controls { flex: 1; display: flex; flex-direction: column; gap: .42rem; }
-.cp-bar-wrap {
-  position: relative;
-  height: 4px;
-  background: rgba(11,29,58,.12);
-  border-radius: 100px;
-  cursor: pointer;
-}
-.cp-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--navy), var(--navy-light));
-  border-radius: 100px;
-  width: 0%;
-  transition: width .1s linear;
-  pointer-events: none;
-}
-.cp-bar-thumb {
-  position: absolute;
-  top: 50%;
-  left: 0%;
-  transform: translate(-50%, -50%);
-  width: 12px;
-  height: 12px;
-  background: var(--navy);
-  border: 2px solid #fff;
-  border-radius: 50%;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity .15s;
-  box-shadow: 0 1px 4px rgba(0,0,0,.2);
-}
-.cp-bar-wrap:hover .cp-bar-thumb { opacity: 1; }
-.cp-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.cp-time {
-  font-size: .65rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  letter-spacing: .04em;
-  font-variant-numeric: tabular-nums;
-}
-.cp-speed {
-  font-family: 'Raleway', sans-serif;
-  font-size: .62rem;
-  font-weight: 700;
-  letter-spacing: .08em;
-  color: var(--text-muted);
+  border-radius: 8px;
+  display: block;
   background: transparent;
-  border: 1px solid rgba(11,29,58,.15);
-  border-radius: 4px;
-  padding: .12rem .45rem;
-  cursor: pointer;
-  transition: all .15s;
 }
-.cp-speed:hover { border-color: var(--navy); color: var(--navy); }
 
 /* ─── CARD FOOTER ACTIONS ─── */
 .card-footer {
@@ -935,7 +859,6 @@ function renderAll() {
   }).join('');
 
   attachEvents();
-  cpBindAll();
   observeReveal();
 }
 
@@ -944,7 +867,6 @@ function renderAll() {
 ══════════════════════════════════════════════ */
 function cardHTML(a, idx) {
   const id = 'c_' + esc(a.title).replace(/[^a-z0-9]/gi,'').slice(0,20) + idx;
-  const audioSrc = 'https://drive.usercontent.google.com/download?id=' + a.drive_file_id + '&export=download&authuser=0';
   const hasTx = !!(a.transcript && a.transcript.trim());
 
 
@@ -961,25 +883,13 @@ function cardHTML(a, idx) {
       ${a.description ? `<p class="card-desc">${esc(a.description)}</p>` : ''}
 
       <div class="card-player-section">
-        <audio id="aud_${id}" preload="none">
-          <source src="${audioSrc}" type="audio/mpeg">
-        </audio>
-        <div class="custom-player">
-          <button class="cp-btn" data-aud="aud_${id}" onclick="cpToggle(this)" aria-label="Play">
-            <svg class="cp-icon-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-            <svg class="cp-icon-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-          </button>
-          <div class="cp-controls">
-            <div class="cp-bar-wrap" data-aud="aud_${id}" onclick="cpSeek(this, event)">
-              <div class="cp-bar-fill"></div>
-              <div class="cp-bar-thumb"></div>
-            </div>
-            <div class="cp-meta">
-              <span class="cp-time" id="cpt_${id}">0:00 / 0:00</span>
-              <button class="cp-speed" data-aud="aud_${id}" onclick="cpSpeed(this)">1×</button>
-            </div>
-          </div>
-        </div>
+        <iframe
+          src="https://drive.google.com/file/d/${a.drive_file_id}/preview"
+          class="drive-audio-player"
+          allow="autoplay"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
       </div>
 
       <div class="card-footer">
