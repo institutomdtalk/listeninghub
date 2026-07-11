@@ -7,450 +7,434 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy:       #0B1D3A;
-  --navy-deep:  #050D1A;
-  --navy-mid:   #0F2645;
-  --navy-light: #163158;
-  --gold:       #C4A45A;
-  --gold-light: #D4BA7A;
-  --gold-pale:  #E8D9B0;
-  --bg:         #F7F3EB;
-  --bg-card:    rgba(255,253,248,.94);
-  --bg-open:    #FFFFFF;
-  --bg-hover:   rgba(240,235,224,.96);
-  --text:       #0B1D3A;
-  --text-mid:   rgba(11,29,58,.58);
-  --text-muted: rgba(11,29,58,.36);
-  --border:     rgba(11,29,58,.08);
-  --border-gold:rgba(196,164,90,.28);
-  --correct:    #3a9e6f;
-  --incorrect:  #b84e39;
+  --navy:      #0B1D3A;
+  --navy-deep: #050D1A;
+  --navy-mid:  #0F2645;
+  --navy-light:#163158;
+  --gold:      #C4A45A;
+  --gold-light:#D4BA7A;
+  --gold-pale: #E8D9B0;
+  --cream:     rgba(255,255,255,.92);
+  --muted:     rgba(255,255,255,.45);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:#07111f;
+  color:var(--cream);
+  font-family:'Raleway',sans-serif;
+  font-weight:300;
+  min-height:100vh;
+  overflow-x:hidden;
+  user-select:none;
 }
 
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-html { scroll-behavior:smooth; }
+/* ── BG ── */
+#bgWrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+#bgImg{position:absolute;inset:-40px;background-size:cover;background-position:right center;background-repeat:no-repeat;}
+#bgDim{position:absolute;inset:0;background:rgba(5,13,26,.72);}
+#pageContent{position:relative;z-index:10;}
 
-body {
-  background: #07111f;
-  color: var(--text);
-  overflow-x: hidden;
-  font-family: 'Raleway', sans-serif;
-  font-weight: 300;
-  min-height: 100vh;
+/* ── HEADER ── */
+.site-header{
+  padding:2.8rem 2.5rem 1.5rem;
+  max-width:700px;margin:0 auto;text-align:center;
 }
-
-/* ─── HEADER ─── */
-.site-header {
-  position: relative;
-  z-index: 20;
-  padding: 3.5rem 3rem 2.5rem;
-  max-width: 1000px;
-  margin: 0 auto;
+.eyebrow{
+  font-size:8.5px;font-weight:600;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:1rem;opacity:.85;
 }
-.header-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-  margin-bottom: 1.6rem;
+.header-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.8rem,6vw,4.2rem);
+  font-weight:300;line-height:1;
+  color:var(--cream);letter-spacing:-.02em;
 }
-.eyebrow-line {
-  width: 36px; height: 1px;
-  background: linear-gradient(90deg, var(--gold), rgba(196,164,90,.3));
+.header-title em{color:var(--gold);font-style:italic;}
+.header-sub{
+  margin-top:.8rem;font-size:.75rem;font-weight:300;
+  color:var(--muted);line-height:1.7;letter-spacing:.02em;
 }
-.eyebrow-text {
-  font-size: 9px; font-weight: 600;
-  letter-spacing: .3em; text-transform: uppercase;
-  color: var(--gold);
-}
-.header-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(3rem, 6vw, 4.8rem);
-  font-weight: 300; line-height: 1;
-  color: rgba(248,245,238,.95);
-  letter-spacing: -.02em;
-}
-.header-title em {
-  font-style: italic; color: var(--gold);
-  font-weight: 300;
-}
-.header-sub {
-  margin-top: 1rem;
-  font-size: .79rem; font-weight: 300;
-  color: rgba(248,245,238,.55);
-  line-height: 1.75; max-width: 520px;
-  letter-spacing: .025em;
-}
-.header-sub em { color: var(--gold-light); font-style: normal; }
-.header-rule {
-  margin-top: 2.2rem; height: 1px;
-  background: linear-gradient(90deg, var(--gold) 0%, rgba(196,164,90,.2) 55%, transparent 100%);
+.header-rule{
+  margin-top:1.8rem;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:.4;
 }
 
-/* ─── MAIN ─── */
-.main {
-  position: relative; z-index: 20;
-  max-width: 1000px;
-  margin: 3rem auto 6rem;
-  padding: 0 3rem;
+/* ── CATEGORY TABS ── */
+.cat-tabs{
+  display:flex;align-items:center;justify-content:center;
+  gap:.6rem;padding:1.4rem 2rem .8rem;
+  flex-wrap:wrap;
+}
+.cat-tab{
+  background:transparent;
+  border:1px solid rgba(196,164,90,.25);
+  color:var(--muted);
+  font-family:'Raleway',sans-serif;
+  font-size:.66rem;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;
+  padding:.4rem 1.1rem;border-radius:100px;
+  cursor:pointer;transition:all .2s ease;
+}
+.cat-tab:hover{border-color:var(--gold);color:var(--gold);}
+.cat-tab.active{background:var(--gold);border-color:var(--gold);color:var(--navy-deep);}
+
+/* ── CAROUSEL STAGE ── */
+.carousel-section{margin-bottom:3rem;}
+.carousel-label{
+  text-align:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.3rem,2.5vw,1.8rem);
+  font-weight:300;font-style:italic;color:var(--gold);
+  margin-bottom:1.8rem;
+  letter-spacing:.02em;
+  text-shadow:0 0 30px rgba(196,164,90,.3);
+}
+.carousel-wrap{
+  position:relative;
+  height:420px;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+/* nav arrows */
+.carr-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);
+  z-index:20;
+  background:rgba(5,13,26,.6);
+  border:1px solid rgba(196,164,90,.3);
+  color:var(--gold);
+  width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s ease;
+  backdrop-filter:blur(4px);
+}
+.carr-arrow:hover{background:rgba(196,164,90,.15);border-color:var(--gold);}
+.carr-arrow.prev{left:.8rem;}
+.carr-arrow.next{right:.8rem;}
+.carr-arrow svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;}
+
+/* ── ALBUM CARDS ── */
+.carr-track{
+  position:relative;width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+}
+.album-card{
+  position:absolute;
+  width:260px;
+  cursor:pointer;
+  transition:transform .5s cubic-bezier(.4,0,.2,1),
+             opacity .5s cubic-bezier(.4,0,.2,1),
+             filter .5s cubic-bezier(.4,0,.2,1),
+             box-shadow .5s ease;
+  transform-origin:center center;
+  border-radius:16px;
+  overflow:hidden;
+}
+/* cover art */
+.album-cover{
+  width:100%;
+  aspect-ratio:1/1;
+  background:linear-gradient(135deg,var(--navy-mid) 0%,var(--navy-deep) 100%);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  overflow:hidden;
+}
+.album-cover::before{
+  content:'';
+  position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(196,164,90,.15) 0%, transparent 60%),
+    radial-gradient(circle at 70% 70%, rgba(11,29,58,.8) 0%, transparent 60%);
+}
+.album-art-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:5rem;font-weight:300;
+  color:rgba(196,164,90,.2);
+  line-height:1;position:relative;z-index:1;
+}
+.album-cat-badge{
+  position:absolute;top:.75rem;right:.75rem;
+  font-size:7px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--navy-deep);background:var(--gold);
+  padding:.2rem .55rem;border-radius:2px;
+  z-index:2;
+}
+/* vinyl shine */
+.album-shine{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.08) 0%,transparent 50%,rgba(0,0,0,.1) 100%);
+  pointer-events:none;z-index:3;
 }
 
-/* ─── LEVEL SECTION ─── */
-.level-section { margin-bottom: 4rem; }
-.level-heading {
-  display: flex; align-items: center;
-  gap: 1rem; margin-bottom: 1.6rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(196,164,90,.15);
+/* album info below cover */
+.album-info{
+  background:rgba(5,13,26,.92);
+  backdrop-filter:blur(8px);
+  padding:.9rem 1.1rem .75rem;
+  border-top:1px solid rgba(196,164,90,.15);
 }
-.level-code {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
-  font-weight: 300; color: var(--gold);
-  line-height: 1; letter-spacing: -.01em;
-  font-style: italic;
-  text-shadow: 0 0 30px rgba(196,164,90,.3);
+.album-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1rem;font-weight:400;
+  color:var(--cream);line-height:1.3;
+  display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden;
 }
-
-/* ─── AUDIO GRID ─── */
-.audio-grid {
-  display: grid; grid-template-columns: 1fr;
-  border: 1px solid rgba(196,164,90,.22);
-  border-radius: 16px; overflow: hidden;
-  box-shadow: 0 8px 40px rgba(5,13,26,.18), 0 2px 12px rgba(5,13,26,.1);
+.album-desc{
+  font-size:.65rem;font-weight:300;
+  color:var(--muted);margin-top:.3rem;
+  display:-webkit-box;-webkit-line-clamp:1;
+  -webkit-box-orient:vertical;overflow:hidden;
+  letter-spacing:.02em;
 }
 
-/* ─── AUDIO CARD ─── */
-.audio-card {
-  background: var(--bg-card);
-  position: relative;
-  transition: background .2s ease;
+/* CARD STATES */
+/* active — center */
+.album-card.state-active{
+  transform:translateX(0) scale(1) rotateY(0deg);
+  opacity:1;
+  filter:none;
+  z-index:10;
+  box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 0 1px rgba(196,164,90,.3);
 }
-.audio-card + .audio-card {
-  border-top: 1px solid rgba(11,29,58,.07);
+/* prev-1 */
+.album-card.state-prev1{
+  transform:translateX(-220px) scale(.78) rotateY(12deg);
+  opacity:.55;filter:brightness(.7) blur(.5px);z-index:7;
 }
-.audio-card.is-open {
-  background: var(--bg-open);
-  box-shadow: inset 0 1px 0 rgba(196,164,90,.15), inset 0 -1px 0 rgba(196,164,90,.1);
+/* prev-2 */
+.album-card.state-prev2{
+  transform:translateX(-360px) scale(.62) rotateY(18deg);
+  opacity:.25;filter:brightness(.5) blur(1px);z-index:5;
 }
-.audio-card::before {
-  content: '';
-  position: absolute; left: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, var(--gold), var(--gold-light));
-  opacity: 0;
-  transition: opacity .25s ease;
-  border-radius: 0 2px 2px 0;
+/* next-1 */
+.album-card.state-next1{
+  transform:translateX(220px) scale(.78) rotateY(-12deg);
+  opacity:.55;filter:brightness(.7) blur(.5px);z-index:7;
 }
-.audio-card.is-open::before { opacity: 1; }
-
-/* card header row */
-.card-header-row {
-  display: flex; align-items: center;
-  gap: 1rem; padding: 1.1rem 1.6rem;
-  cursor: pointer; user-select: none;
-  transition: background .18s ease;
-  min-height: 58px;
+/* next-2 */
+.album-card.state-next2{
+  transform:translateX(360px) scale(.62) rotateY(-18deg);
+  opacity:.25;filter:brightness(.5) blur(1px);z-index:5;
 }
-.card-header-row:hover { background: var(--bg-hover); }
-
-.card-title {
-  flex: 1;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.18rem; font-weight: 400;
-  color: var(--navy-deep); line-height: 1.3;
-  letter-spacing: .01em;
-  transition: color .2s;
+/* hidden */
+.album-card.state-hidden{
+  transform:translateX(500px) scale(.5);
+  opacity:0;pointer-events:none;z-index:1;
 }
-.audio-card.is-open .card-title { color: var(--navy); }
-.card-header-row:hover .card-title { color: var(--navy); }
-
-.card-chevron {
-  flex-shrink: 0; width: 14px; height: 14px;
-  stroke: rgba(11,29,58,.3); fill: none; stroke-width: 2;
-  transition: transform .3s cubic-bezier(.4,0,.2,1), stroke .2s;
-}
-.audio-card.is-open .card-chevron { transform: rotate(180deg); stroke: var(--gold); }
-.card-header-row:hover .card-chevron { stroke: var(--navy); }
-
-/* collapsible body */
-.card-collapsible {
-  overflow: hidden; max-height: 0; opacity: 0;
-  transition: max-height .45s cubic-bezier(.4,0,.2,1), opacity .3s ease;
-  background: var(--bg-open);
-  border-top: 1px solid rgba(196,164,90,.12);
-}
-.audio-card.is-open .card-collapsible { max-height: 1200px; opacity: 1; }
-
-.card-desc {
-  font-size: .75rem; font-weight: 400;
-  color: var(--text-mid); line-height: 1.7;
-  letter-spacing: .02em;
-  padding: 1.1rem 1.6rem .6rem;
-  border-bottom: 1px dashed rgba(11,29,58,.06);
-  margin-bottom: .2rem;
+.album-card.state-hidden-left{
+  transform:translateX(-500px) scale(.5);
+  opacity:0;pointer-events:none;z-index:1;
 }
 
-/* waveform */
-.card-wave { width: 36px; height: 20px; opacity: .18; flex-shrink: 0; }
+/* ── DOTS indicator ── */
+.carr-dots{
+  display:flex;align-items:center;justify-content:center;
+  gap:.4rem;margin-top:1.2rem;flex-wrap:wrap;
+  padding:0 1rem;
+  max-width:300px;margin-left:auto;margin-right:auto;
+}
+.carr-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:rgba(196,164,90,.3);
+  transition:all .3s ease;cursor:pointer;flex-shrink:0;
+}
+.carr-dot.active{background:var(--gold);transform:scale(1.4);}
 
-/* ─── PLAYER ─── */
-.card-player-section { padding: .9rem 1.6rem 1rem; }
-.custom-player {
-  display: flex; align-items: center; gap: 1rem;
-  background: linear-gradient(135deg, rgba(11,29,58,.05) 0%, rgba(11,29,58,.03) 100%);
-  border: 1px solid rgba(196,164,90,.2);
-  border-radius: 12px; padding: .75rem 1.1rem;
+/* ── PLAYER PANEL ── */
+.player-panel{
+  max-width:480px;margin:1rem auto 0;
+  padding:0 1.5rem;
 }
-.cp-btn {
-  flex-shrink: 0; width: 40px; height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy-deep) 100%);
-  border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: transform .15s, box-shadow .15s;
-  box-shadow: 0 3px 12px rgba(11,29,58,.3);
+.now-playing-label{
+  text-align:center;
+  font-size:8px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold);opacity:.7;margin-bottom:1rem;
 }
-.cp-btn:hover { transform: scale(1.08); box-shadow: 0 4px 16px rgba(11,29,58,.4); }
-.cp-btn:active { transform: scale(.94); }
-.cp-btn svg { width: 14px; height: 14px; }
-.cp-center { flex: 1; display: flex; flex-direction: column; gap: .45rem; }
-.cp-track {
-  position: relative; height: 3px;
-  background: rgba(11,29,58,.1); border-radius: 100px; cursor: pointer;
+.np-title{
+  text-align:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.35rem;font-weight:400;
+  color:var(--cream);line-height:1.3;
+  margin-bottom:.2rem;min-height:1.8rem;
 }
-.cp-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--gold), var(--gold-light));
-  border-radius: 100px; width: 0%;
-  transition: width .1s linear; pointer-events: none;
+.np-cat{
+  text-align:center;font-size:.68rem;font-weight:300;
+  color:var(--muted);letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:1.4rem;
 }
-.cp-thumb {
-  position: absolute; top: 50%; left: 0%;
-  transform: translate(-50%,-50%);
-  width: 11px; height: 11px;
-  background: var(--gold); border: 2px solid #fff;
-  border-radius: 50%; pointer-events: none;
-  opacity: 0; transition: opacity .15s;
-  box-shadow: 0 1px 4px rgba(196,164,90,.4);
+/* progress */
+.sp-bar-wrap{
+  position:relative;height:4px;
+  background:rgba(255,255,255,.12);
+  border-radius:100px;cursor:pointer;margin-bottom:.5rem;
 }
-.cp-track:hover .cp-thumb { opacity: 1; }
-.cp-foot { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
-.cp-time {
-  font-size: .62rem; font-weight: 500;
-  color: var(--text-muted); letter-spacing: .04em;
-  font-variant-numeric: tabular-nums;
+.sp-bar-fill{
+  height:100%;background:var(--gold);
+  border-radius:100px;width:0%;
+  transition:width .1s linear;pointer-events:none;
 }
-.cp-status {
-  font-size: .61rem; color: var(--text-muted);
-  font-style: italic; flex: 1; text-align: center;
+.sp-bar-thumb{
+  position:absolute;top:50%;left:0%;
+  transform:translate(-50%,-50%);
+  width:13px;height:13px;
+  background:var(--gold-light);border:2px solid rgba(255,255,255,.9);
+  border-radius:50%;pointer-events:none;
+  opacity:0;transition:opacity .15s;
+  box-shadow:0 2px 6px rgba(0,0,0,.3);
 }
-.cp-spd {
-  font-family: 'Raleway', sans-serif;
-  font-size: .6rem; font-weight: 700; letter-spacing: .08em;
-  color: var(--text-muted); background: transparent;
-  border: 1px solid rgba(11,29,58,.12); border-radius: 4px;
-  padding: .12rem .45rem; cursor: pointer; transition: all .15s;
+.sp-bar-wrap:hover .sp-bar-thumb{opacity:1;}
+.sp-times{
+  display:flex;justify-content:space-between;
+  font-size:.62rem;font-weight:400;color:var(--muted);
+  letter-spacing:.04em;font-variant-numeric:tabular-nums;
+  margin-bottom:1.4rem;
 }
-.cp-spd:hover { border-color: var(--gold); color: var(--gold); }
+/* controls */
+.sp-controls{
+  display:flex;align-items:center;justify-content:center;gap:1.5rem;
+  margin-bottom:1rem;
+}
+.sp-btn-sm{
+  background:none;border:none;cursor:pointer;
+  color:var(--muted);transition:color .15s,transform .15s;
+  display:flex;align-items:center;
+}
+.sp-btn-sm:hover{color:var(--cream);transform:scale(1.1);}
+.sp-btn-sm svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.sp-btn-play{
+  width:54px;height:54px;border-radius:50%;
+  background:var(--gold);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,transform .15s;
+  box-shadow:0 4px 20px rgba(196,164,90,.35);
+}
+.sp-btn-play:hover{background:var(--gold-light);transform:scale(1.06);}
+.sp-btn-play:active{transform:scale(.95);}
+.sp-btn-play svg{width:20px;height:20px;fill:var(--navy-deep);stroke:none;}
+/* speed & status */
+.sp-meta{
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sp-status{
+  font-size:.65rem;font-style:italic;color:var(--muted);
+}
+.sp-spd{
+  font-family:'Raleway',sans-serif;
+  font-size:.62rem;font-weight:700;letter-spacing:.1em;
+  color:var(--muted);background:transparent;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:4px;padding:.12rem .5rem;
+  cursor:pointer;transition:all .15s;
+}
+.sp-spd:hover{border-color:var(--gold);color:var(--gold);}
 
-/* ─── CARD FOOTER ─── */
-.card-footer {
-  display: flex; gap: .5rem;
-  padding: .5rem 1.6rem 1.2rem; flex-wrap: wrap;
+/* ── TRANSCRIPT PANEL ── */
+.tx-section{
+  max-width:540px;margin:1.5rem auto 0;
+  padding:0 1.5rem 3rem;
 }
-.btn-expand {
-  display: flex; align-items: center; gap: .45rem;
-  background: transparent;
-  border: 1px solid rgba(196,164,90,.25);
-  color: rgba(11,29,58,.45);
-  font-family: 'Raleway', sans-serif;
-  font-size: .62rem; font-weight: 600;
-  letter-spacing: .14em; text-transform: uppercase;
-  padding: .38rem .9rem; border-radius: 100px;
-  cursor: pointer; transition: all .2s ease;
+.tx-toggle{
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  background:transparent;
+  border:1px solid rgba(196,164,90,.25);
+  color:var(--muted);
+  font-family:'Raleway',sans-serif;
+  font-size:.63rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  padding:.42rem 1.2rem;border-radius:100px;
+  cursor:pointer;transition:all .2s ease;
+  margin:0 auto .8rem;display:flex;
 }
-.btn-expand:hover {
-  border-color: var(--gold); color: var(--gold);
-  background: rgba(196,164,90,.06);
+.tx-toggle:hover{border-color:var(--gold);color:var(--gold);}
+.tx-toggle.open{border-color:rgba(255,255,255,.3);color:var(--cream);}
+.tx-toggle svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.2;transition:transform .25s;}
+.tx-toggle.open svg{transform:rotate(180deg);}
+.tx-body{
+  display:none;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(196,164,90,.15);
+  border-radius:10px;padding:1.1rem 1.3rem;
+  border-left:3px solid var(--gold);
 }
-.btn-expand.active {
-  border-color: var(--navy); color: var(--navy);
-  background: rgba(11,29,58,.05);
-}
-.btn-expand svg {
-  width: 10px; height: 10px; stroke: currentColor;
-  fill: none; stroke-width: 2.2;
-  transition: transform .25s ease; flex-shrink: 0;
-}
-.btn-expand.active svg { transform: rotate(180deg); }
+.tx-body.open{display:block;}
+.tx-label{font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem;}
+.tx-text{font-size:.77rem;font-weight:300;color:rgba(255,255,255,.72);line-height:1.9;white-space:pre-wrap;}
 
-/* ─── PANELS ─── */
-.panel {
-  overflow: hidden; max-height: 0; opacity: 0;
-  transition: max-height .45s cubic-bezier(.4,0,.2,1), opacity .3s ease;
+/* ── VOCAB AI BUTTON (inline) ── */
+.vocab-trigger{
+  display:block;
+  margin:1rem auto 0;
+  background:transparent;
+  border:1px solid rgba(196,164,90,.3);
+  color:var(--gold);
+  font-family:'Raleway',sans-serif;
+  font-size:.65rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  padding:.45rem 1.3rem;border-radius:100px;
+  cursor:pointer;transition:all .2s;
 }
-.panel.open { max-height: 1000px; opacity: 1; }
-.panel-inner {
-  padding: 0 1.6rem 1.6rem;
-  border-top: 1px solid rgba(196,164,90,.12);
-}
-.panel-label {
-  font-size: 8px; font-weight: 700;
-  letter-spacing: .26em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: .75rem; margin-top: 1rem;
-  display: flex; align-items: center; gap: .55rem;
-}
-.panel-label::after {
-  content: ''; flex: 1; height: 1px;
-  background: linear-gradient(90deg, rgba(196,164,90,.3), transparent);
-}
-.transcript-body {
-  font-size: .77rem; font-weight: 400;
-  color: var(--text-mid); line-height: 1.9; letter-spacing: .025em;
-  border-left: 2px solid var(--gold); padding-left: 1.1rem;
-  white-space: pre-wrap;
-}
+.vocab-trigger:hover{background:rgba(196,164,90,.1);}
 
-/* ─── STATES ─── */
-.state-container { padding: 4rem 0; text-align: center; }
-.spinner {
-  width: 30px; height: 30px;
-  border: 1.5px solid rgba(248,245,238,.1);
-  border-top-color: var(--gold);
-  border-radius: 50%;
-  animation: spin .75s linear infinite;
-  margin: 0 auto 1rem;
-}
-.state-text {
-  font-size: .78rem; font-weight: 300;
-  color: rgba(248,245,238,.4); letter-spacing: .08em;
-}
-.empty-glyph {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 3rem; font-weight: 300;
-  color: rgba(248,245,238,.12); margin-bottom: .75rem;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+/* ── STATES ── */
+.state-container{padding:4rem 0;text-align:center;}
+.spinner{width:30px;height:30px;border:1.5px solid rgba(255,255,255,.1);border-top-color:var(--gold);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto 1rem;}
+.state-text{font-size:.78rem;font-weight:300;color:var(--muted);letter-spacing:.08em;}
+.empty-glyph{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:rgba(196,164,90,.15);margin-bottom:.75rem;}
+@keyframes spin{to{transform:rotate(360deg);}}
 
-/* ─── REVEAL ─── */
-[data-reveal] { opacity:0; transform:translateY(18px); transition:opacity .6s ease,transform .6s ease; }
-[data-reveal].visible { opacity:1; transform:translateY(0); }
+/* ── REVEAL ── */
+[data-reveal]{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
+[data-reveal].visible{opacity:1;transform:translateY(0);}
 
-/* ─── FOOTER ─── */
-.site-footer {
-  position: relative; z-index: 20;
-  text-align: center; padding: 1.5rem;
-  font-size: .64rem; font-weight: 300;
-  letter-spacing: .1em;
-  color: rgba(248,245,238,.28);
-  border-top: 1px solid rgba(196,164,90,.15);
+/* ── FOOTER ── */
+.site-footer{
+  text-align:center;padding:1.5rem;
+  font-size:.64rem;font-weight:300;letter-spacing:.1em;
+  color:rgba(255,255,255,.2);
+  border-top:1px solid rgba(196,164,90,.12);
 }
-.site-footer strong { color: rgba(196,164,90,.5); font-weight: 400; }
+.site-footer strong{color:rgba(196,164,90,.4);font-weight:400;}
 
-/* ─── MOBILE ─── */
-@media (max-width: 620px) {
-  .site-header, .main { padding-left: 1.25rem; padding-right: 1.25rem; }
-  .card-footer { flex-direction: column; }
-  .btn-expand { width: 100%; justify-content: center; }
-  .header-title { font-size: 2.8rem; }
-}
+/* ── VOCAB MODAL ── */
+.vocab-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(5,13,26,.65);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:1.5rem;}
+.vocab-overlay.open{display:flex;}
+.vocab-modal{background:#FDFAF4;border:1px solid rgba(196,164,90,.28);border-radius:16px;width:100%;max-width:560px;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 28px 80px rgba(0,0,0,.45);}
+.vocab-modal-header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem 1rem;border-bottom:1px solid rgba(11,29,58,.07);flex-shrink:0;}
+.vocab-modal-title{display:flex;align-items:center;gap:.6rem;}
+.vocab-modal-title svg{width:16px;height:16px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.vocab-modal-title span{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;color:var(--navy-deep);}
+.vocab-modal-sub{font-size:.67rem;font-weight:300;color:rgba(11,29,58,.38);margin-top:.1rem;}
+.vocab-modal-close{background:none;border:none;cursor:pointer;color:rgba(11,29,58,.38);font-size:1.2rem;padding:.25rem .4rem;border-radius:4px;transition:color .15s;}
+.vocab-modal-close:hover{color:var(--navy-deep);}
+.vocab-chat{flex:1;overflow-y:auto;padding:1rem 1.5rem;display:flex;flex-direction:column;gap:.85rem;}
+.vocab-msg{max-width:92%;font-size:.78rem;font-weight:300;line-height:1.7;}
+.vocab-msg.user{align-self:flex-end;background:var(--navy);color:var(--gold-pale);padding:.55rem .95rem;border-radius:12px 12px 2px 12px;font-weight:400;}
+.vocab-msg.ai{align-self:flex-start;background:rgba(11,29,58,.05);color:var(--navy-deep);padding:.75rem 1rem;border-radius:2px 12px 12px 12px;border-left:2px solid var(--gold);white-space:pre-wrap;}
+.vocab-msg.ai strong{font-weight:600;color:var(--navy-deep);}
+.vocab-msg.thinking{align-self:flex-start;color:rgba(11,29,58,.38);font-style:italic;font-size:.72rem;}
+.vocab-input-row{display:flex;gap:.6rem;padding:.9rem 1.5rem 1.1rem;border-top:1px solid rgba(11,29,58,.07);flex-shrink:0;}
+.vocab-input{flex:1;background:rgba(11,29,58,.04);border:1px solid rgba(11,29,58,.12);border-radius:8px;color:var(--navy-deep);font-family:'Raleway',sans-serif;font-size:.78rem;font-weight:300;padding:.6rem .95rem;outline:none;transition:border-color .2s;}
+.vocab-input:focus{border-color:var(--gold);}
+.vocab-input::placeholder{color:rgba(11,29,58,.38);}
+.vocab-send{background:var(--navy);border:none;border-radius:8px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.vocab-send:hover{background:#163158;}
+.vocab-send svg{width:15px;height:15px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 
-
-/* ─── HERO BG IMAGE ─── */
-#bgWrap {
-  position: fixed; inset: 0; z-index: 0;
-  pointer-events: none; transform: translateZ(0); overflow: hidden;
-  isolation: isolate;
+@media(max-width:600px){
+  .site-header{padding:2rem 1.5rem 1.2rem;}
+  .carr-arrow.prev{left:.2rem;} .carr-arrow.next{right:.2rem;}
+  .album-card{width:200px;}
+  .album-card.state-prev1{transform:translateX(-165px) scale(.75) rotateY(10deg);}
+  .album-card.state-next1{transform:translateX(165px) scale(.75) rotateY(-10deg);}
+  .album-card.state-prev2{transform:translateX(-280px) scale(.6) rotateY(15deg);}
+  .album-card.state-next2{transform:translateX(280px) scale(.6) rotateY(-15deg);}
+  .carousel-wrap{height:360px;}
+  .player-panel{padding:0 1rem;}
 }
-#bgImg {
-  position: absolute; inset: -40px;
-  background-size: cover; background-position: right center; background-repeat: no-repeat;
-  transform: translateZ(0); will-change: transform;
-}
-#bgDim { position: absolute; inset: 0; background: rgba(5,13,26,.45); }
-
-#pageContent { position: relative; z-index: 10; isolation: isolate; }
-
-/* ─── FLOATING AI BUTTON ─── */
-.fab-wrap {
-  position: fixed; right: 1.6rem; bottom: 2rem; z-index: 150;
-  width: 110px; height: 110px;
-  display: flex; align-items: center; justify-content: center;
-}
-.fab-ai {
-  position: relative; z-index: 2;
-  width: 64px; height: 64px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #2a4a7f 0%, #0B1D3A 60%, #050D1A 100%);
-  border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: transform .2s ease;
-  box-shadow: 0 0 14px rgba(196,164,90,.3), 0 0 32px rgba(196,164,90,.12), 0 5px 22px rgba(5,13,26,.65);
-}
-.fab-ai:hover { transform: scale(1.08); }
-.fab-ai:active { transform: scale(.95); }
-.fab-orbit { position: absolute; inset: 0; pointer-events: none; }
-.fab-dot {
-  position: absolute; border-radius: 50%;
-  top: 50%; left: 50%;
-}
-.fab-dot-1 { width:6px;height:6px;top:calc(50% - 3px);left:calc(50% - 3px); background:var(--gold); box-shadow:0 0 7px 2px rgba(196,164,90,.8); opacity:.95; animation:orb1a 4s linear infinite; }
-.fab-dot-2 { width:4px;height:4px;top:calc(50% - 2px);left:calc(50% - 2px); background:var(--gold-light); box-shadow:0 0 5px 2px rgba(212,186,122,.6); opacity:.65; animation:orb1a 4s linear infinite -1.33s; }
-.fab-dot-3 { width:5px;height:5px;top:calc(50% - 2.5px);left:calc(50% - 2.5px); background:var(--gold); box-shadow:0 0 6px 2px rgba(196,164,90,.7); opacity:.8; animation:orb1a 4s linear infinite -2.66s; }
-.fab-dot-4 { width:4px;height:4px;top:calc(50% - 2px);left:calc(50% - 2px); background:var(--gold-pale); box-shadow:0 0 5px 1px rgba(232,217,176,.5); opacity:.55; animation:orb2a 3s linear infinite; }
-.fab-dot-5 { width:3px;height:3px;top:calc(50% - 1.5px);left:calc(50% - 1.5px); background:var(--gold-pale); opacity:.4; animation:orb2a 3s linear infinite -1.5s; }
-@keyframes orb1a {
-  0%   { transform:rotate(0deg)   translate(48px,0) rotate(0deg); }
-  100% { transform:rotate(360deg) translate(48px,0) rotate(-360deg); }
-}
-@keyframes orb2a {
-  0%   { transform:rotate(0deg)    translate(34px,0) rotate(0deg); }
-  100% { transform:rotate(-360deg) translate(34px,0) rotate(360deg); }
-}
-
-/* ─── VOCAB MODAL ─── */
-.vocab-overlay {
-  display: none; position: fixed; inset: 0; z-index: 200;
-  background: rgba(5,13,26,.65); backdrop-filter: blur(6px);
-  align-items: center; justify-content: center; padding: 1.5rem;
-}
-.vocab-overlay.open { display: flex; }
-.vocab-modal {
-  background: #FDFAF4; border: 1px solid rgba(196,164,90,.28);
-  border-radius: 16px; width: 100%; max-width: 560px; max-height: 85vh;
-  display: flex; flex-direction: column; overflow: hidden;
-  box-shadow: 0 28px 80px rgba(0,0,0,.45), 0 0 0 1px rgba(196,164,90,.1);
-}
-.vocab-modal-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 1.2rem 1.5rem 1rem;
-  border-bottom: 1px solid rgba(11,29,58,.07); flex-shrink: 0;
-  background: linear-gradient(180deg, rgba(248,245,238,.8) 0%, transparent 100%);
-}
-.vocab-modal-title { display: flex; align-items: center; gap: .6rem; }
-.vocab-modal-title svg { width:16px;height:16px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round; }
-.vocab-modal-title span { font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;color:var(--navy-deep);letter-spacing:.02em; }
-.vocab-modal-sub { font-size:.67rem;font-weight:300;color:var(--text-muted);letter-spacing:.04em;margin-top:.1rem; }
-.vocab-modal-close { background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:1.2rem;line-height:1;padding:.25rem .4rem;border-radius:4px;transition:color .15s; }
-.vocab-modal-close:hover { color:var(--navy); }
-.vocab-chat { flex:1;overflow-y:auto;padding:1rem 1.5rem;display:flex;flex-direction:column;gap:.85rem; }
-.vocab-msg { max-width:92%;font-size:.78rem;font-weight:300;line-height:1.7;letter-spacing:.015em; }
-.vocab-msg.user { align-self:flex-end;background:var(--navy);color:var(--gold-pale);padding:.55rem .95rem;border-radius:12px 12px 2px 12px;font-weight:400; }
-.vocab-msg.ai { align-self:flex-start;background:rgba(11,29,58,.05);color:var(--navy-deep);padding:.75rem 1rem;border-radius:2px 12px 12px 12px;border-left:2px solid var(--gold);white-space:pre-wrap; }
-.vocab-msg.ai strong { font-weight:600;color:var(--navy); }
-.vocab-msg.thinking { align-self:flex-start;color:var(--text-muted);font-style:italic;font-size:.72rem;padding:.3rem 0; }
-.vocab-input-row { display:flex;gap:.6rem;padding:.9rem 1.5rem 1.1rem;border-top:1px solid rgba(11,29,58,.07);flex-shrink:0; }
-.vocab-input { flex:1;background:rgba(11,29,58,.04);border:1px solid rgba(11,29,58,.12);border-radius:8px;color:var(--navy-deep);font-family:'Raleway',sans-serif;font-size:.78rem;font-weight:300;padding:.6rem .95rem;outline:none;transition:border-color .2s; }
-.vocab-input:focus { border-color:var(--gold); }
-.vocab-input::placeholder { color:var(--text-muted); }
-.vocab-send { background:var(--navy);border:none;border-radius:8px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .15s; }
-.vocab-send:hover { background:var(--navy-light); }
-.vocab-send svg { width:15px;height:15px;stroke:var(--gold);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round; }
-
 </style>
 </head>
 <body>
-
-
 
 <div id="bgWrap">
   <div id="bgImg"></div>
@@ -458,21 +442,19 @@ body {
 </div>
 
 <div id="pageContent">
-<!-- HEADER -->
+
 <header class="site-header">
-  <div class="header-eyebrow">
-    <span class="eyebrow-line"></span>
-    <span class="eyebrow-text">Instituto MD Talk &nbsp;·&nbsp; TMEP</span>
-  </div>
+  <p class="eyebrow">Instituto MD Talk &nbsp;·&nbsp; TMEP</p>
   <h1 class="header-title">Listening <em>Hub</em></h1>
-  <p class="header-sub">Acervo de áudios para praticar seu inglês — organizado por área, com transcrições disponíveis. O carregamento pode levar alguns segundos. Use o botão <em>Vocabulary AI</em> para tirar dúvidas de vocabulário enquanto ouve.</p>
+  <p class="header-sub">Acervo de áudios para praticar seu inglês. Use ← → ou deslize para navegar entre as faixas.</p>
   <div class="header-rule"></div>
 </header>
 
+<div class="cat-tabs" id="catTabs">
+  <button class="cat-tab active" data-cat="all">All</button>
+</div>
 
-
-<!-- MAIN -->
-<main class="main" id="mainContent">
+<main id="mainContent">
   <div class="state-container">
     <div class="spinner"></div>
     <p class="state-text">Loading audio library…</p>
@@ -483,274 +465,439 @@ body {
   <strong>MD Talk</strong> &nbsp;·&nbsp; Listening Hub &nbsp;·&nbsp; All rights reserved
 </footer>
 
+</div><!-- /pageContent -->
+
+<!-- VOCAB MODAL -->
+<div class="vocab-overlay" id="vocabOverlay" onclick="handleOverlayClick(event)">
+  <div class="vocab-modal">
+    <div class="vocab-modal-header">
+      <div>
+        <div class="vocab-modal-title">
+          <svg viewBox="0 0 24 24"><path d="M12 2a8 8 0 0 1 8 8c0 3.5-2 6.5-5 7.9V20a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2.1C6 16.5 4 13.5 4 10a8 8 0 0 1 8-8z"/><path d="M9 10h.01M12 10h.01M15 10h.01"/></svg>
+          <span>Vocabulary AI</span>
+        </div>
+        <p class="vocab-modal-sub">Type any word or phrase from the audio</p>
+      </div>
+      <button class="vocab-modal-close" onclick="closeVocabModal()">&#x2715;</button>
+    </div>
+    <div class="vocab-chat" id="vocabChat"></div>
+    <div class="vocab-input-row">
+      <input class="vocab-input" id="vocabInput" type="text" placeholder="e.g. amyloidosis, shortness of breath…" autocomplete="off">
+      <button class="vocab-send" onclick="sendVocabQuery()">
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
-
-
-/* ══════════════════════════════════════════════
-   WAVEFORM SVG
-══════════════════════════════════════════════ */
-function makeWave() {
-  const bars = 18;
-  const heights = Array.from({length:bars}, () => 20 + Math.random() * 60);
-  const paths = heights.map((h, i) => {
-    const x = i * 3.2;
-    const y = (80 - h) / 2;
-    return `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="2" height="${h.toFixed(1)}" rx="1"/>`;
-  }).join('');
-  return `<svg class="card-wave" viewBox="0 0 58 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g fill="rgba(11,29,58,0.15)">${paths}</g>
-  </svg>`;
-}
-
-/* ══════════════════════════════════════════════
-   CONFIG
-══════════════════════════════════════════════ */
 const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxAjBvDp7lCOOVbtyJaoiRulKf0GoDFgsLZj4W6Rc6kLawC4ITZSwXzsBVsd17hZd6Bbw/exec';
+const CAT_LABELS = { regular:'Regular English', medical:'Medical English', business:'Business English' };
+const CAT_ORDER  = ['regular','medical','business'];
 
-const CAT_LABELS = {
-  'regular':  'Regular English',
-  'medical':  'Medical English',
-  'business': 'Business English',
-};
-const CAT_ORDER = ['regular','medical','business'];
-
-
-
-let allAudios = [];
+let allAudios    = [];
+let filtered     = [];
 let activeFilter = 'all';
+let currentIdx   = 0;
+let currentAudio = null;
+let isPlaying    = false;
 
-/* FETCH — Google Sheets via Apps Script */
+/* ══ FETCH ══ */
 async function loadAudios() {
   const main = document.getElementById('mainContent');
   try {
     main.innerHTML = '<div class="state-container"><div class="spinner"></div><p class="state-text">Connecting to library…</p></div>';
-    const url = SHEET_URL + '?type=audios&t=' + Date.now();
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('HTTP ' + res.status + ' — check Apps Script deployment');
+    const res  = await fetch(SHEET_URL + '?type=audios&t=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     const text = await res.text();
     let data;
-    try { data = JSON.parse(text); }
-    catch(e) { throw new Error('JSON parse error: ' + text.slice(0,200)); }
-    if (data.error) throw new Error('Sheet error: ' + data.error);
-    if (!Array.isArray(data)) throw new Error('Expected array, got: ' + typeof data + ' — ' + text.slice(0,200));
-    allAudios = data
-      .filter(r => r.title && r.drive_file_id)
-      .map(r => ({
-        ...r,
-        drive_file_id: extractDriveId(r.drive_file_id),
-        category: normCategory(r.category),
-      }))
-      .filter(r => r.drive_file_id);
-    if (allAudios.length === 0) throw new Error('Array received but 0 valid tracks. Raw: ' + JSON.stringify(data).slice(0,300));
-    buildPills();
-    renderAll();
-  } catch (err) {
-    main.innerHTML = `
-      <div class="state-container">
-        <div class="empty-glyph">&#9671;</div>
-        <p class="state-text" style="font-size:.78rem;max-width:580px;margin:.5rem auto 0;line-height:1.7;word-break:break-word;">
-          <strong style="color:#c4614a;display:block;margin-bottom:.4rem;">Could not load audio library</strong>
-          ${err.message}<br><br>
-          <span style="opacity:.6;font-size:.7rem">Check that the Apps Script is published as a Web App with access set to <em>Anyone</em>, then reload the page.</span>
-        </p>
-      </div>`;
-    console.error('Listening Hub load error:', err);
+    try { data = JSON.parse(text); } catch(e) { throw new Error('JSON error: ' + text.slice(0,120)); }
+    if (data.error) throw new Error(data.error);
+    if (!Array.isArray(data)) throw new Error('Not an array');
+    allAudios = data.filter(r => r.title && r.drive_file_id).map(r => ({
+      ...r,
+      drive_file_id: extractDriveId(r.drive_file_id),
+      category: normCategory(r.category),
+    })).filter(r => r.drive_file_id);
+    if (!allAudios.length) throw new Error('0 valid tracks');
+    buildTabs();
+    applyFilter('all');
+  } catch(err) {
+    main.innerHTML = `<div class="state-container"><div class="empty-glyph">&#9671;</div>
+      <p class="state-text"><strong style="color:#c4614a">Error:</strong> ${err.message}</p></div>`;
   }
 }
 
-function buildPills() { /* filters removed */ }
+/* ══ TABS ══ */
+function buildTabs() {
+  const tabs = document.getElementById('catTabs');
+  const cats = CAT_ORDER.filter(c => allAudios.some(a => a.category === c));
+  cats.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-tab';
+    btn.dataset.cat = cat;
+    btn.textContent = CAT_LABELS[cat] || cat;
+    btn.addEventListener('click', () => applyFilter(cat));
+    tabs.appendChild(btn);
+  });
+  tabs.querySelector('[data-cat="all"]').addEventListener('click', () => applyFilter('all'));
+}
 
-/* ══════════════════════════════════════════════
-   RENDER
-══════════════════════════════════════════════ */
-function renderAll() {
-  const filtered = allAudios;
+function applyFilter(cat) {
+  activeFilter = cat;
+  document.querySelectorAll('.cat-tab').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+  filtered = cat === 'all' ? [...allAudios] : allAudios.filter(a => a.category === cat);
+  currentIdx = 0;
+  stopAudio();
+  renderCarousel();
+}
 
+/* ══ CAROUSEL RENDER ══ */
+function renderCarousel() {
   const main = document.getElementById('mainContent');
-
   if (!filtered.length) {
-    main.innerHTML = `<div class="state-container">
-      <div class="empty-glyph">&#9671;</div>
-      <p class="state-text">No audio tracks found for this selection.</p>
-    </div>`;
+    main.innerHTML = '<div class="state-container"><div class="empty-glyph">&#9671;</div><p class="state-text">No tracks in this category.</p></div>';
     return;
   }
 
-  const groups = {};
-  filtered.forEach(a => { (groups[a.category] = groups[a.category]||[]).push(a); });
-  // Include any unknown categories not in CAT_ORDER
-  const knownSorted = CAT_ORDER.filter(c => groups[c]);
-  const unknownSorted = Object.keys(groups).filter(c => !CAT_ORDER.includes(c));
-  const sorted = [...knownSorted, ...unknownSorted];
+  // Group by category for separate carousels, or single if filtered
+  if (activeFilter === 'all') {
+    const groups = {};
+    filtered.forEach(a => { (groups[a.category] = groups[a.category]||[]).push(a); });
+    const sorted = CAT_ORDER.filter(c => groups[c]);
+    main.innerHTML = sorted.map(cat => buildCarouselSection(cat, groups[cat], `carr_${cat}`)).join('');
+  } else {
+    main.innerHTML = buildCarouselSection(activeFilter, filtered, 'carr_main');
+  }
 
-  main.innerHTML = sorted.map(cat => {
-    const items = groups[cat];
-    return `<section class="level-section" data-reveal>
-      <div class="level-heading">
-        <span class="level-code">${CAT_LABELS[cat] || cat.charAt(0).toUpperCase()+cat.slice(1)}</span>
-      </div>
+  // Init all carousels
+  document.querySelectorAll('.carousel-section').forEach(sec => {
+    const id = sec.dataset.carrid;
+    initCarousel(id);
+  });
 
-      <div class="audio-grid">${items.map((a,i) => cardHTML(a,i)).join('')}</div>
-    </section>`;
-  }).join('');
-
-  attachEvents();
   observeReveal();
 }
 
-/* ══════════════════════════════════════════════
-   CARD HTML
-══════════════════════════════════════════════ */
-function cardHTML(a, idx) {
-  const id = 'c_' + esc(a.title).replace(/[^a-z0-9]/gi,'').slice(0,20) + idx;
-  const hasTx = !!(a.transcript && a.transcript.trim());
+function buildCarouselSection(cat, items, carrid) {
+  const label = CAT_LABELS[cat] || cat.charAt(0).toUpperCase() + cat.slice(1);
+  const cards = items.map((a, i) => buildAlbumCard(a, i, carrid)).join('');
+  const dots  = items.map((_, i) => `<span class="carr-dot${i===0?' active':''}" data-carrid="${carrid}" data-idx="${i}" onclick="goTo('${carrid}',${i})"></span>`).join('');
 
+  return `
+  <section class="carousel-section" data-reveal data-carrid="${carrid}" data-items='${JSON.stringify(items.map(a=>({...a,transcript:a.transcript||''})))}'>
+    <p class="carousel-label">${label}</p>
+    <div class="carousel-wrap">
+      <button class="carr-arrow prev" onclick="shift('${carrid}',-1)">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="carr-track" id="track_${carrid}">${cards}</div>
+      <button class="carr-arrow next" onclick="shift('${carrid}',1)">
+        <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+      </button>
+    </div>
+    <div class="carr-dots" id="dots_${carrid}">${dots}</div>
 
-  return `<div class="audio-card">
-    <!-- COLLAPSED HEADER — always visible -->
-    <div class="card-header-row" data-card-toggle>
-      <h3 class="card-title">${esc(a.title)}</h3>
-      ${makeWave()}
-      <svg class="card-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    <!-- Player panel for this carousel -->
+    <div class="player-panel" id="pp_${carrid}">
+      <p class="now-playing-label">Now Playing</p>
+      <p class="np-title" id="npt_${carrid}">${esc(items[0].title)}</p>
+      <p class="np-cat"  id="npc_${carrid}">${label}</p>
+      <div class="sp-bar-wrap" id="bar_${carrid}" onclick="spSeek(this,'${carrid}')">
+        <div class="sp-bar-fill" id="fill_${carrid}"></div>
+        <div class="sp-bar-thumb" id="thumb_${carrid}"></div>
+      </div>
+      <div class="sp-times">
+        <span id="tcur_${carrid}">0:00</span>
+        <span id="tdur_${carrid}">0:00</span>
+      </div>
+      <div class="sp-controls">
+        <button class="sp-btn-sm" onclick="shift('${carrid}',-1)" title="Previous">
+          <svg viewBox="0 0 24 24"><polygon points="19,20 9,12 19,4"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+        </button>
+        <button class="sp-btn-play" id="playbtn_${carrid}" onclick="spToggle('${carrid}')" aria-label="Play">
+          <svg class="sp-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+          <svg class="sp-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        </button>
+        <button class="sp-btn-sm" onclick="shift('${carrid}',1)" title="Next">
+          <svg viewBox="0 0 24 24"><polygon points="5,4 15,12 5,20"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+        </button>
+      </div>
+      <div class="sp-meta">
+        <span class="sp-status" id="status_${carrid}">Click play to load</span>
+        <button class="sp-spd" id="spd_${carrid}" onclick="spSpeed('${carrid}')">1×</button>
+      </div>
     </div>
 
-    <!-- EXPANDABLE BODY -->
-    <div class="card-collapsible">
-      ${a.description ? `<p class="card-desc">${esc(a.description)}</p>` : ''}
-
-      <div class="card-player-section">
-        <div class="custom-player" id="player_${id}">
-          <button class="cp-btn" onclick="cpPlay(this, '${a.drive_file_id}', 'player_${id}')" aria-label="Play">
-            <svg class="cp-play" viewBox="0 0 24 24" fill="var(--gold)"><polygon points="5,3 19,12 5,21"/></svg>
-            <svg class="cp-pause" viewBox="0 0 24 24" fill="var(--gold)" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-          </button>
-          <div class="cp-center">
-            <div class="cp-track" onclick="cpSeekClick(this)">
-              <div class="cp-fill"></div>
-              <div class="cp-thumb"></div>
-            </div>
-            <div class="cp-foot">
-              <span class="cp-time">0:00 / 0:00</span>
-              <span class="cp-status">Click play to load</span>
-              <button class="cp-spd" onclick="cpSpeedClick(this)">1×</button>
-            </div>
-          </div>
-        </div>
-        <audio id="aud_${id}" preload="none" style="display:none"></audio>
+    <!-- Transcript -->
+    <div class="tx-section">
+      <button class="tx-toggle" id="txtog_${carrid}" onclick="toggleTx('${carrid}')">
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        Transcript
+      </button>
+      <div class="tx-body" id="txbody_${carrid}">
+        <p class="tx-label">Transcript</p>
+        <p class="tx-text" id="txtext_${carrid}">${esc(items[0].transcript||'')}</p>
       </div>
+      <button class="vocab-trigger" onclick="openVocabModal('${cat}')">Vocabulary AI</button>
+    </div>
+  </section>`;
+}
 
-      <div class="card-footer">
-        ${hasTx ? `<button class="btn-expand" data-target="tx_${id}">
-          <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg> Transcript
-        </button>` : ''}
-
-      </div>
-
-      ${hasTx ? `<div class="panel" id="tx_${id}">
-        <div class="panel-inner">
-          <p class="panel-label">Transcript</p>
-          <p class="transcript-body">${esc(a.transcript)}</p>
-        </div>
-      </div>` : ''}
-
+function buildAlbumCard(a, i, carrid) {
+  const catLabel = CAT_LABELS[a.category] || a.category;
+  const num = String(i+1).padStart(2,'0');
+  const state = i === 0 ? 'state-active' : i === 1 ? 'state-next1' : i === 2 ? 'state-next2' : 'state-hidden';
+  return `<div class="album-card ${state}" data-idx="${i}" data-carrid="${carrid}" onclick="cardClick('${carrid}',${i})">
+    <div class="album-cover">
+      <span class="album-art-num">${num}</span>
+      <span class="album-cat-badge">${catLabel}</span>
+      <div class="album-shine"></div>
+    </div>
+    <div class="album-info">
+      <p class="album-title">${esc(a.title)}</p>
+      ${a.description ? `<p class="album-desc">${esc(a.description)}</p>` : ''}
     </div>
   </div>`;
 }
 
-/* ══════════════════════════════════════════════
-   EVENTS
-══════════════════════════════════════════════ */
-function attachEvents() {
-  /* toggle card open/close */
-  document.querySelectorAll('[data-card-toggle]').forEach(header => {
-    header.addEventListener('click', () => {
-      const card = header.closest('.audio-card');
-      card.classList.toggle('is-open');
-    });
+/* ══ CAROUSEL STATE ══ */
+const carrState = {}; // carrid → { idx, audio, loaded, playing, speeds }
+
+function initCarousel(carrid) {
+  carrState[carrid] = { idx: 0, audio: null, loaded: false, playing: false, speedIdx: 0 };
+  updateCarousel(carrid, 0);
+
+  // Swipe
+  const wrap = document.getElementById('track_' + carrid);
+  if (!wrap) return;
+  let startX = 0, startT = 0;
+  wrap.addEventListener('touchstart', e => { startX = e.touches[0].clientX; startT = Date.now(); }, {passive:true});
+  wrap.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    const dt = Date.now() - startT;
+    if (Math.abs(dx) > 40 && dt < 400) shift(carrid, dx < 0 ? 1 : -1);
+  }, {passive:true});
+}
+
+function getItems(carrid) {
+  const sec = document.querySelector(`[data-carrid="${carrid}"]`);
+  if (!sec) return [];
+  try { return JSON.parse(sec.dataset.items); } catch{ return []; }
+}
+
+function updateCarousel(carrid, newIdx) {
+  const items  = getItems(carrid);
+  if (!items.length) return;
+  const st = carrState[carrid];
+  st.idx = newIdx;
+
+  // Update card states
+  const cards = document.querySelectorAll(`[data-carrid="${carrid}"].album-card`);
+  cards.forEach(card => {
+    const ci = parseInt(card.dataset.idx);
+    const d  = ci - newIdx;
+    card.className = 'album-card ' + (
+      d ===  0 ? 'state-active'  :
+      d ===  1 ? 'state-next1'   :
+      d ===  2 ? 'state-next2'   :
+      d === -1 ? 'state-prev1'   :
+      d === -2 ? 'state-prev2'   :
+      d < 0    ? 'state-hidden-left' : 'state-hidden'
+    );
   });
 
-  /* expand sub-panels (transcript / questions) */
-  document.querySelectorAll('.btn-expand').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const p = document.getElementById(btn.dataset.target);
-      if (!p) return;
-      const open = p.classList.toggle('open');
-      btn.classList.toggle('active', open);
-    });
+  // Update dots
+  document.querySelectorAll(`[data-carrid="${carrid}"].carr-dot`).forEach(d => {
+    d.classList.toggle('active', parseInt(d.dataset.idx) === newIdx);
   });
 
+  // Update player info
+  const a = items[newIdx];
+  if (!a) return;
+  const npt = document.getElementById('npt_' + carrid);
+  const npc = document.getElementById('npc_' + carrid);
+  if (npt) npt.textContent = a.title;
+  if (npc) npc.textContent = CAT_LABELS[a.category] || a.category;
 
+  // Update transcript
+  const txtext = document.getElementById('txtext_' + carrid);
+  if (txtext) txtext.textContent = a.transcript || '(No transcript available)';
 
+  // Reset transcript toggle
+  const txbody = document.getElementById('txbody_' + carrid);
+  const txtog  = document.getElementById('txtog_' + carrid);
+  if (txbody) { txbody.classList.remove('open'); }
+  if (txtog)  { txtog.classList.remove('open'); }
 
+  // Reset player if track changed
+  if (st.audio) {
+    st.audio.pause();
+    st.audio.src = '';
+  }
+  st.audio = null;
+  st.loaded = false;
+  st.playing = false;
+  spSyncBtn(carrid, false);
+  const fill  = document.getElementById('fill_'  + carrid);
+  const tcur  = document.getElementById('tcur_'  + carrid);
+  const tdur  = document.getElementById('tdur_'  + carrid);
+  const status= document.getElementById('status_' + carrid);
+  if (fill)   fill.style.width = '0%';
+  if (tcur)   tcur.textContent = '0:00';
+  if (tdur)   tdur.textContent = '0:00';
+  if (status) status.textContent = 'Click play to load';
 }
 
-
-
-
-
-/* ══════════════════════════════════════════════
-   UTILS
-══════════════════════════════════════════════ */
-function extractDriveId(raw) {
-  if (!raw) return '';
-  raw = raw.trim();
-  // Already a clean ID (no slashes, ? or &): return as-is
-  if (!/[/?&]/.test(raw)) return raw;
-  // /file/d/ID/  or  /file/d/ID?  or  /file/d/ID&
-  let m = raw.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-  if (m) return m[1];
-  // ?id=ID or &id=ID — stop at & or end
-  m = raw.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if (m) return m[1];
-  // /d/ID/
-  m = raw.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if (m) return m[1];
-  return raw;
+function shift(carrid, dir) {
+  const items = getItems(carrid);
+  const st    = carrState[carrid];
+  if (!items.length) return;
+  const newIdx = Math.max(0, Math.min(items.length - 1, st.idx + dir));
+  if (newIdx === st.idx) return;
+  updateCarousel(carrid, newIdx);
 }
 
-function normCategory(raw) {
-  if (!raw) return 'medical';
-  const v = raw.trim().toLowerCase();
-  if (v === 'medical'  || v.includes('medic') || v.includes('neuro') ||
-      v.includes('cardio') || v.includes('onco') || v.includes('pedia') ||
-      v.includes('psych') || v.includes('surg') || v.includes('clini') ||
-      v.includes('health') || v.includes('pharm') || v.includes('anat') ||
-      v.includes('physio') || v.includes('patho') || v.includes('radio'))
-    return 'medical';
-  if (v === 'business' || v.includes('busi') || v.includes('corpo') ||
-      v.includes('finan') || v.includes('market') || v.includes('manage'))
-    return 'business';
-  if (v === 'regular'  || v.includes('reg') || v.includes('general') ||
-      v.includes('every') || v.includes('daily') || v.includes('convers'))
-    return 'regular';
-  // Default: medical (most common for MD Talk)
-  return 'medical';
-}
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function escAttr(s) {
-  return String(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+function goTo(carrid, idx) {
+  const st = carrState[carrid];
+  if (st && st.idx !== idx) updateCarousel(carrid, idx);
 }
 
-
-function observeReveal() {
-  const obs = new IntersectionObserver(es => {
-    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, { threshold: .08 });
-  document.querySelectorAll('[data-reveal]').forEach(el => obs.observe(el));
+function cardClick(carrid, idx) {
+  const st = carrState[carrid];
+  if (!st) return;
+  if (st.idx !== idx) { updateCarousel(carrid, idx); return; }
+  // already active — toggle play
+  spToggle(carrid);
 }
 
+/* ══ PLAYER ══ */
+const SP_SPEEDS = [1, 1.25, 1.5, 0.75];
 
-/* ══════════════════════════════════════════════
-   VOCABULARY AI MODAL
-══════════════════════════════════════════════ */
-let vocabCategory = '';
+async function spToggle(carrid) {
+  const st    = carrState[carrid];
+  const items = getItems(carrid);
+  if (!st || !items.length) return;
+  const a = items[st.idx];
 
+  if (st.playing && st.audio && !st.audio.paused) {
+    st.audio.pause();
+    st.playing = false;
+    spSyncBtn(carrid, false);
+    return;
+  }
+
+  const status = document.getElementById('status_' + carrid);
+
+  if (!st.audio || !st.loaded) {
+    if (status) status.textContent = 'Loading…';
+    if (!st.audio) {
+      st.audio = new Audio();
+      const spd = document.getElementById('spd_' + carrid);
+      if (spd) st.audio.playbackRate = SP_SPEEDS[st.speedIdx||0];
+      st.audio.addEventListener('timeupdate', () => spUpdate(carrid));
+      st.audio.addEventListener('ended', () => { st.playing=false; spSyncBtn(carrid,false); });
+      st.audio.addEventListener('error', () => { if(status) status.textContent='Error loading audio'; });
+    }
+
+    try {
+      const proxyUrl = SHEET_URL + '?type=audioblob&id=' + a.drive_file_id;
+      const res  = await fetch(proxyUrl);
+      const json = await res.json();
+      if (json.error) throw new Error(json.error);
+      const bin  = atob(json.b64);
+      const arr  = new Uint8Array(bin.length);
+      for (let i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i);
+      const blob = new Blob([arr], {type: json.mime||'audio/mpeg'});
+      st.audio.src = URL.createObjectURL(blob);
+      st.loaded = true;
+      const tdur = document.getElementById('tdur_' + carrid);
+      st.audio.addEventListener('loadedmetadata', () => {
+        if (tdur) tdur.textContent = spFmt(st.audio.duration);
+      });
+    } catch(err) {
+      if (status) status.textContent = 'Could not load: ' + err.message;
+      return;
+    }
+  }
+
+  try {
+    await st.audio.play();
+    st.playing = true;
+    spSyncBtn(carrid, true);
+    if (status) status.textContent = '';
+  } catch(e) {
+    if (status) status.textContent = 'Playback error';
+  }
+}
+
+function spSyncBtn(carrid, playing) {
+  const btn = document.getElementById('playbtn_' + carrid);
+  if (!btn) return;
+  btn.querySelector('.sp-play').style.display  = playing ? 'none'  : 'block';
+  btn.querySelector('.sp-pause').style.display = playing ? 'block' : 'none';
+}
+
+function spUpdate(carrid) {
+  const st   = carrState[carrid];
+  if (!st || !st.audio) return;
+  const pct  = st.audio.duration ? (st.audio.currentTime/st.audio.duration)*100 : 0;
+  const fill  = document.getElementById('fill_'  + carrid);
+  const thumb = document.getElementById('thumb_' + carrid);
+  const tcur  = document.getElementById('tcur_'  + carrid);
+  if (fill)  fill.style.width = pct + '%';
+  if (thumb) thumb.style.left = pct + '%';
+  if (tcur)  tcur.textContent = spFmt(st.audio.currentTime);
+}
+
+function spSeek(bar, carrid) {
+  const st = carrState[carrid];
+  if (!st || !st.audio || !st.audio.duration) return;
+  const rect = bar.getBoundingClientRect();
+  st.audio.currentTime = ((event.clientX - rect.left) / rect.width) * st.audio.duration;
+}
+
+function spSpeed(carrid) {
+  const st  = carrState[carrid];
+  const btn = document.getElementById('spd_' + carrid);
+  if (!st || !btn) return;
+  st.speedIdx = ((st.speedIdx||0) + 1) % SP_SPEEDS.length;
+  if (st.audio) st.audio.playbackRate = SP_SPEEDS[st.speedIdx];
+  btn.textContent = SP_SPEEDS[st.speedIdx] + '×';
+}
+
+function spFmt(s) {
+  if (!s || isNaN(s)) return '0:00';
+  return Math.floor(s/60) + ':' + String(Math.floor(s%60)).padStart(2,'0');
+}
+
+/* ══ TRANSCRIPT ══ */
+function toggleTx(carrid) {
+  const body = document.getElementById('txbody_' + carrid);
+  const tog  = document.getElementById('txtog_'  + carrid);
+  if (!body) return;
+  const open = body.classList.toggle('open');
+  if (tog) tog.classList.toggle('open', open);
+}
+
+/* ══ KEYBOARD NAV ══ */
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  const secs = document.querySelectorAll('.carousel-section');
+  if (!secs.length) return;
+  // Navigate the first visible carousel (simplest UX)
+  const carrid = secs[0].dataset.carrid;
+  if (e.key === 'ArrowLeft')  shift(carrid, -1);
+  if (e.key === 'ArrowRight') shift(carrid,  1);
+  if (e.key === ' ') { e.preventDefault(); spToggle(carrid); }
+});
+
+/* ══ VOCAB AI ══ */
+let vocabCategory = 'medical';
 let vocabInputListenerAttached = false;
+
 function openVocabModal(cat) {
-  vocabCategory = cat;
+  vocabCategory = cat || 'medical';
   document.getElementById('vocabOverlay').classList.add('open');
   const inp = document.getElementById('vocabInput');
   inp.focus();
@@ -763,253 +910,80 @@ function openVocabModal(cat) {
     addAiMsg("Hello! I'm your Vocabulary AI. Type any word or expression you heard in the audio and I'll explain its meaning, clinical usage, and give you examples in context.");
   }
 }
-
-function closeVocabModal() {
-  document.getElementById('vocabOverlay').classList.remove('open');
-}
-
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById('vocabOverlay')) closeVocabModal();
-}
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeVocabModal();
-});
-
-// vocabInput listener attached on modal open (element may not exist at parse time)
+function closeVocabModal() { document.getElementById('vocabOverlay').classList.remove('open'); }
+function handleOverlayClick(e) { if (e.target === document.getElementById('vocabOverlay')) closeVocabModal(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeVocabModal(); });
 
 function addUserMsg(text) {
   const chat = document.getElementById('vocabChat');
   const div = document.createElement('div');
-  div.className = 'vocab-msg user';
-  div.textContent = text;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
+  div.className = 'vocab-msg user'; div.textContent = text;
+  chat.appendChild(div); chat.scrollTop = chat.scrollHeight;
 }
-
 function addAiMsg(text) {
   const chat = document.getElementById('vocabChat');
   const div = document.createElement('div');
   div.className = 'vocab-msg ai';
   div.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
+  chat.appendChild(div); chat.scrollTop = chat.scrollHeight;
   return div;
 }
-
 function addThinking() {
   const chat = document.getElementById('vocabChat');
   const div = document.createElement('div');
-  div.className = 'vocab-msg thinking';
-  div.id = 'vocabThinking';
-  div.textContent = 'Looking that up…';
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
+  div.className = 'vocab-msg thinking'; div.id = 'vocabThinking'; div.textContent = 'Looking that up…';
+  chat.appendChild(div); chat.scrollTop = chat.scrollHeight;
 }
-
-function removeThinking() {
-  const el = document.getElementById('vocabThinking');
-  if (el) el.remove();
-}
+function removeThinking() { const el = document.getElementById('vocabThinking'); if (el) el.remove(); }
 
 async function sendVocabQuery() {
   const input = document.getElementById('vocabInput');
   const query = input.value.trim();
   if (!query) return;
-
   input.value = '';
   addUserMsg(query);
   addThinking();
-
   const catLabel = CAT_LABELS[vocabCategory] || vocabCategory;
-  const systemPrompt = `You are a Medical English vocabulary assistant for Brazilian physicians studying English at Instituto MD Talk. 
-The student is currently in the "${catLabel}" section of the Listening Hub.
-When given a word or expression, respond in this exact format:
-
-**[Word/Expression]**
-📖 **Meaning:** [clear definition in simple English]
-🏥 **Clinical context:** [how it's used in medical/professional settings — 1-2 sentences]
-💬 **Example:** "[a natural sentence using the word in context]"
-🔊 **Pronunciation tip:** [phonetic hint or rhyme, e.g. "sounds like..."]
-
-Keep responses concise and practical. If it's a common phrase or idiom, explain the literal vs actual meaning.
-Always respond in English.`;
-
   try {
-    // system prompt is hardcoded in Apps Script defaultSystem() — no need to send it
     const vocabUrl = SHEET_URL + '?type=vocab&query=' + encodeURIComponent(query) + '&cat=' + encodeURIComponent(catLabel);
-    const res = await fetch(vocabUrl);
+    const res  = await fetch(vocabUrl);
     const data = await res.json();
     removeThinking();
-
     if (data.error) throw new Error(data.error);
     addAiMsg(data.reply);
-
   } catch(err) {
     removeThinking();
-    addAiMsg('Sorry, I couldn\'t reach the AI right now. Please try again in a moment.');
-    console.error('Vocab AI error:', err);
+    addAiMsg("Sorry, I couldn't reach the AI right now. Please try again.");
   }
 }
 
-
-
-/* ══════════════════════════════════════════
-   CUSTOM PLAYER JS
-══════════════════════════════════════════ */
-const CP_SPEEDS = [1, 1.25, 1.5, 0.75];
-const CP_LOADING = {};
-
-async function cpPlay(btn, fileId, playerId) {
-  const player = document.getElementById(playerId);
-  const audId  = 'aud_' + playerId.replace('player_','');
-  const aud    = document.getElementById(audId);
-  if (!aud) return;
-  const status = player.querySelector('.cp-status');
-
-  // Pause all others
-  document.querySelectorAll('audio').forEach(a => {
-    if (a !== aud && !a.paused) {
-      a.pause();
-      const ob = a.closest('.card-player-section')?.querySelector('.cp-btn');
-      if (ob) { ob.querySelector('.cp-play').style.display='block'; ob.querySelector('.cp-pause').style.display='none'; }
-    }
-  });
-
-  // If already loaded and playing — pause
-  if (aud._loaded && !aud.paused) {
-    aud.pause();
-    btn.querySelector('.cp-play').style.display  = 'block';
-    btn.querySelector('.cp-pause').style.display = 'none';
-    return;
-  }
-
-  // If already loaded — just play
-  if (aud._loaded) {
-    aud.play();
-    btn.querySelector('.cp-play').style.display  = 'none';
-    btn.querySelector('.cp-pause').style.display = 'block';
-    return;
-  }
-
-  // First time: fetch as blob via Apps Script proxy then create blob URL
-  status.textContent = 'Loading…';
-  btn.disabled = true;
-
-  try {
-    const proxyUrl = SHEET_URL + '?type=audioblob&id=' + fileId;
-    const res  = await fetch(proxyUrl);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const json = await res.json();
-    if (json.error) throw new Error(json.error);
-    if (!json.b64)  throw new Error('No audio data received');
-    console.log('Audio received:', json.name, '| mime:', json.mime, '| b64 length:', json.b64.length);
-    // Decode base64 → Uint8Array → Blob → blob URL
-    const binary = atob(json.b64);
-    const bytes  = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    const blob    = new Blob([bytes], { type: json.mime || 'audio/mpeg' });
-    console.log('Blob created:', blob.size, 'bytes, type:', blob.type);
-    const blobUrl = URL.createObjectURL(blob);
-    aud.src = blobUrl;
-    aud._loaded = true;
-
-    // Bind events once
-    const fill   = player.querySelector('.cp-fill');
-    const thumb  = player.querySelector('.cp-thumb');
-    const timeEl = player.querySelector('.cp-time');
-    aud.addEventListener('timeupdate', () => {
-      const pct = aud.duration ? (aud.currentTime/aud.duration)*100 : 0;
-      fill.style.width = pct + '%';
-      thumb.style.left = pct + '%';
-      timeEl.textContent = cpFmt(aud.currentTime) + ' / ' + cpFmt(aud.duration||0);
-    });
-    aud.addEventListener('ended', () => {
-      btn.querySelector('.cp-play').style.display  = 'block';
-      btn.querySelector('.cp-pause').style.display = 'none';
-    });
-
-    await aud.play();
-    btn.querySelector('.cp-play').style.display  = 'none';
-    btn.querySelector('.cp-pause').style.display = 'block';
-    status.textContent = '';
-  } catch(err) {
-    status.textContent = 'Error: ' + err.message;
-    console.error('Audio load error:', err);
-  } finally {
-    btn.disabled = false;
-  }
+/* ══ UTILS ══ */
+function extractDriveId(raw) {
+  if (!raw) return '';
+  raw = raw.trim();
+  if (!/[/?&]/.test(raw)) return raw;
+  let m = raw.match(/\/file\/d\/([a-zA-Z0-9_-]+)/); if (m) return m[1];
+  m = raw.match(/[?&]id=([a-zA-Z0-9_-]+)/); if (m) return m[1];
+  m = raw.match(/\/d\/([a-zA-Z0-9_-]+)/); if (m) return m[1];
+  return raw;
 }
-
-function cpSeekClick(track) {
-  // find audio in same player
-  const player = track.closest('.custom-player');
-  const section = player.closest('.card-player-section');
-  const aud = section.querySelector('audio');
-  if (!aud || !aud.duration) return;
-  const rect = track.getBoundingClientRect();
-  const pct  = (event.clientX - rect.left) / rect.width;
-  aud.currentTime = pct * aud.duration;
+function normCategory(raw) {
+  if (!raw) return 'medical';
+  const v = raw.trim().toLowerCase();
+  if (v==='medical'||v.includes('medic')||v.includes('neuro')||v.includes('cardio')||v.includes('onco')||v.includes('pedia')||v.includes('psych')||v.includes('surg')||v.includes('clini')||v.includes('health')||v.includes('pharm')||v.includes('anat')||v.includes('physio')||v.includes('patho')||v.includes('radio')) return 'medical';
+  if (v==='business'||v.includes('busi')||v.includes('corpo')||v.includes('finan')||v.includes('market')||v.includes('manage')) return 'business';
+  if (v==='regular'||v.includes('reg')||v.includes('general')||v.includes('every')||v.includes('daily')||v.includes('convers')) return 'regular';
+  return 'medical';
 }
-
-function cpSpeedClick(btn) {
-  const player = btn.closest('.custom-player');
-  const section = player.closest('.card-player-section');
-  const aud = section.querySelector('audio');
-  if (!aud) return;
-  const speeds = [1, 1.25, 1.5, 0.75];
-  const cur = parseFloat(btn.textContent) || 1;
-  const idx = (speeds.indexOf(cur) + 1) % speeds.length;
-  aud.playbackRate = speeds[idx];
-  btn.textContent  = speeds[idx] + '×';
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function observeReveal() {
+  const obs = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, {threshold:.05});
+  document.querySelectorAll('[data-reveal]').forEach(el => obs.observe(el));
 }
-
-function cpFmt(s) {
-  if (!s || isNaN(s)) return '0:00';
-  return Math.floor(s/60) + ':' + String(Math.floor(s%60)).padStart(2,'0');
-}
-
 
 loadAudios();
 </script>
-
-<!-- VOCABULARY AI MODAL -->
-<div class="vocab-overlay" id="vocabOverlay" onclick="handleOverlayClick(event)">
-  <div class="vocab-modal">
-    <div class="vocab-modal-header">
-      <div>
-        <div class="vocab-modal-title">
-          <svg viewBox="0 0 24 24"><path d="M12 2a8 8 0 0 1 8 8c0 3-1.5 5.5-4 7l-1 3H9l-1-3C5.5 15.5 4 13 4 10a8 8 0 0 1 8-8z"/><path d="M9 10h.01M12 10h.01M15 10h.01"/></svg>
-          <span>Vocabulary AI</span>
-        </div>
-        <p class="vocab-modal-sub">Type any word or phrase from the audio</p>
-      </div>
-      <button class="vocab-modal-close" onclick="closeVocabModal()">&#x2715;</button>
-    </div>
-    <div class="vocab-chat" id="vocabChat"></div>
-    <div class="vocab-input-row">
-      <input class="vocab-input" id="vocabInput" type="text" placeholder="e.g. amyloidosis, cardiac output, shortness of breath…" autocomplete="off">
-      <button class="vocab-send" id="vocabSend" onclick="sendVocabQuery()">
-        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-      </button>
-    </div>
-  </div>
-</div>
-
-
-<!-- FLOATING AI BUTTON -->
-<div class="fab-wrap">
-  <div class="fab-orbit">
-    <span class="fab-dot fab-dot-1"></span>
-    <span class="fab-dot fab-dot-2"></span>
-    <span class="fab-dot fab-dot-3"></span>
-    <span class="fab-dot fab-dot-4"></span>
-    <span class="fab-dot fab-dot-5"></span>
-  </div>
-  <button class="fab-ai" onclick="openVocabModal('medical')" aria-label="Vocabulary AI">
-    <svg style="width:30px;height:30px;filter:brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(5deg) brightness(1.1) drop-shadow(0 0 5px rgba(196,164,90,.8));" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 411 512.455"><path fill="#213853" fill-rule="nonzero" d="M372.051 147.174c10.205 1 19.394 5.584 26.275 12.467 7.82 7.818 12.674 18.613 12.674 30.497v40.881c0 11.883-4.854 22.678-12.674 30.497-6.871 6.872-16.042 11.453-26.228 12.463-2.76 35.268-32.451 63.241-68.401 63.241H248.96v17.858c7.963 2.394 13.813 9.792 13.861 18.485h25.01c43.316 0 78.72 35.404 78.72 78.72v49.752c0 5.755-4.665 10.42-10.419 10.42H57.101c-5.754 0-10.419-4.665-10.419-10.42v-49.752c0-43.316 35.404-78.72 78.72-78.72h24.063c.048-8.668 5.917-16.076 13.861-18.479V337.22h-54.737c-35.914 0-65.579-27.915-68.391-63.133-10.704-.735-20.363-5.408-27.524-12.571C4.854 253.697 0 242.902 0 231.019v-40.881c0-11.884 4.854-22.679 12.674-30.497 7.171-7.173 16.847-11.85 27.571-12.574 3.063-34.97 32.609-62.609 68.344-62.609h87.316V61.51a31.659 31.659 0 01-11.948-7.508c-5.724-5.725-9.266-13.635-9.266-22.368 0-8.734 3.542-16.643 9.266-22.368C189.682 3.542 197.592 0 206.324 0c8.733 0 16.643 3.542 22.367 9.267 5.725 5.723 9.267 13.632 9.267 22.367 0 8.733-3.542 16.643-9.267 22.367a31.649 31.649 0 01-11.948 7.509v22.948h86.954c35.772 0 65.342 27.695 68.354 62.716z"/><path fill="#495F7C" d="M238.541 337.22v17.044h-64.797V337.22z"/><path fill="#DD786D" d="M39.977 263.614c-16.53-1.618-29.558-15.658-29.558-32.595v-40.881c0-16.937 13.028-30.977 29.558-32.595v106.071z"/><path fill="#EE9983" d="M39.977 250.267c-16.53-1.618-29.558-15.659-29.558-32.596v-27.533c0-16.937 13.028-30.976 29.558-32.595v92.724z"/><path fill="#DD786D" d="M372.309 263.462c15.914-2.202 28.272-15.948 28.272-32.443v-40.881c0-16.495-12.358-30.241-28.272-32.443v105.767z"/><path fill="#EE9983" d="M372.309 250.115c15.914-2.202 28.272-15.948 28.272-32.444v-27.533c0-16.495-12.358-30.241-28.272-32.442v92.419z"/><path fill="#DFDCDF" d="M108.589 94.937h195.108c31.974 0 58.133 26.159 58.133 58.132v115.54c0 31.973-26.159 58.132-58.133 58.132H108.589c-31.974 0-58.133-26.159-58.133-58.132v-115.54c0-31.973 26.159-58.132 58.133-58.132z"/><path fill="#F9F2F5" d="M104.421 94.937h182.605c31.972 0 58.133 26.168 58.133 58.132v115.54c0 16.042-6.594 30.633-17.203 41.18a57.64 57.64 0 01-21.377 4.096H123.974c-31.965 0-58.133-26.16-58.133-58.132v-115.54c0-25.373 11.859-45.276 38.58-45.276z"/><path fill="#F0AB9E" d="M206.325 10.419c11.716 0 21.214 9.498 21.214 21.215s-9.498 21.214-21.214 21.214c-11.717 0-21.215-9.497-21.215-21.214 0-11.717 9.498-21.215 21.215-21.215z"/><path fill="#EA8D7A" d="M227.501 32.89c-.65 11.133-9.881 19.959-21.177 19.959-9.487 0-17.519-6.228-20.232-14.819.651-11.132 9.882-19.958 21.176-19.958 9.488 0 17.52 6.228 20.233 14.818z"/><path fill="#FAF4F4" d="M168.871 364.682h74.543c4.908 0 8.929 3.986 8.988 8.881h-92.518c.058-4.895 4.08-8.881 8.987-8.881z"/><path fill="#F2EBEC" d="M132.26 383.982h148.364c.225.416.526.8.901 1.132 4.08 3.602 7.715 7.879 10.912 12.302 3.222 4.459 6.025 9.122 8.403 13.424 4.133 7.479 6.384 13.587 7.591 19.801 1.22 6.285 1.412 12.9 1.412 21.225v49.998c0 .058.001.115.004.172h-206.81c.002-.057.004-.114.004-.172v-49.998c0-8.325.192-14.94 1.412-21.225 1.207-6.214 3.457-12.322 7.591-19.801 2.378-4.302 5.182-8.965 8.404-13.424 3.197-4.423 6.831-8.7 10.912-12.302a4.14 4.14 0 00.9-1.132zm160.087.154c35.481 2.346 63.785 32.099 63.785 68.147v20.154a4.002 4.002 0 00-.219-.006h-37.734v-20.565c0-8.754-.215-15.773-1.576-22.787-1.376-7.086-3.89-13.956-8.47-22.243-2.486-4.499-5.457-9.429-8.956-14.272-2.093-2.896-4.367-5.744-6.83-8.428zm63.785 96.626v21.274h-37.957c.002-.057.004-.114.004-.172v-21.097h37.734c.073 0 .146-.002.219-.005zM94.709 502.036H57.101v-21.273c.062.003.124.004.187.004h37.417v21.097c0 .058.002.115.004.172zm-.004-29.605H57.288c-.063 0-.125.002-.187.004v-20.152c0-35.923 28.106-65.596 63.414-68.123-2.454 2.676-4.72 5.517-6.807 8.404-3.499 4.842-6.47 9.772-8.957 14.272-4.58 8.288-7.094 15.157-8.47 22.243-1.362 7.014-1.576 14.033-1.576 22.787v20.565z"/><path fill="#233551" fill-rule="nonzero" d="M98.871 472.431a4.168 4.168 0 010 8.336H57.288a4.169 4.169 0 010-8.336h41.583zM162.039 408.205h89.154c12.956 0 23.565 10.618 23.565 23.565v24.569c0 12.977-10.587 23.565-23.565 23.565h-89.154c-12.96 0-23.565-10.617-23.565-23.565V431.77c0-12.982 10.583-23.565 23.565-23.565z"/><path fill="#EE9A87" d="M162.039 418.624h89.154c7.231 0 13.146 5.918 13.146 13.146v24.569c0 7.228-5.918 13.146-13.146 13.146h-89.154c-7.228 0-13.146-5.915-13.146-13.146V431.77c0-7.231 5.915-13.146 13.146-13.146z"/><path fill="#213853" fill-rule="nonzero" d="M137.619 159.185c11.492 0 21.899 4.66 29.43 12.192 7.532 7.531 12.192 17.938 12.192 29.43 0 22.985-18.637 41.623-41.622 41.623-11.493 0-21.899-4.66-29.431-12.192s-12.192-17.939-12.192-29.431 4.66-21.899 12.192-29.43c7.532-7.532 17.938-12.192 29.431-12.192z"/><path fill="#3A506D" d="M137.619 165.437c19.535 0 35.37 15.835 35.37 35.37 0 19.534-15.835 35.371-35.37 35.371-19.535 0-35.371-15.837-35.371-35.371 0-19.535 15.836-35.37 35.371-35.37z"/><path fill="#213853" fill-rule="nonzero" d="M137.619 170.483c8.372 0 15.953 3.395 21.442 8.882 5.487 5.487 8.882 13.07 8.882 21.442 0 8.373-3.395 15.954-8.882 21.443-5.489 5.487-13.07 8.882-21.442 8.882-8.374 0-15.955-3.395-21.442-8.883-5.488-5.487-8.883-13.07-8.883-21.442s3.395-15.954 8.882-21.442c5.489-5.487 13.07-8.882 21.443-8.882z"/><path fill="#AFE3F1" d="M137.619 176.734c13.296 0 24.073 10.777 24.073 24.073 0 13.295-10.777 24.073-24.073 24.073-13.295 0-24.074-10.778-24.074-24.073 0-13.296 10.779-24.073 24.074-24.073z"/><path fill="#213853" fill-rule="nonzero" d="M275.443 159.185c22.986 0 41.623 18.637 41.623 41.622 0 11.492-4.66 21.899-12.192 29.431-7.531 7.532-17.938 12.192-29.431 12.192-11.492 0-21.899-4.66-29.431-12.192-7.531-7.532-12.191-17.939-12.191-29.431s4.66-21.899 12.191-29.43c7.532-7.532 17.939-12.192 29.431-12.192z"/><path fill="#374B66" d="M275.443 165.437c19.535 0 35.371 15.835 35.371 35.37 0 19.534-15.836 35.371-35.371 35.371-19.535 0-35.371-15.837-35.371-35.371 0-19.535 15.836-35.37 35.371-35.37z"/><path fill="#213853" fill-rule="nonzero" d="M275.443 170.483c8.373 0 15.954 3.395 21.443 8.882 5.487 5.488 8.882 13.07 8.882 21.442s-3.395 15.955-8.883 21.442c-5.487 5.488-13.07 8.883-21.442 8.883-8.373 0-15.955-3.395-21.442-8.883-5.487-5.487-8.883-13.07-8.883-21.442s3.396-15.954 8.883-21.442c5.488-5.487 13.07-8.882 21.442-8.882z"/><path fill="#AFE3F1" d="M275.443 176.734c13.295 0 24.073 10.777 24.073 24.073 0 13.295-10.778 24.073-24.073 24.073s-24.073-10.778-24.073-24.073c0-13.296 10.778-24.073 24.073-24.073z"/><path fill="#213853" fill-rule="nonzero" d="M237.741 265.105a6.252 6.252 0 110 12.503h-63.197a6.252 6.252 0 110-12.503h63.197zM191.366 111.116a9.653 9.653 0 016.842 2.835 9.649 9.649 0 012.835 6.843 9.652 9.652 0 01-2.835 6.843 9.648 9.648 0 01-6.842 2.835 9.65 9.65 0 01-6.844-2.835 9.657 9.657 0 01-2.835-6.843 9.653 9.653 0 012.835-6.843 9.657 9.657 0 016.844-2.835z"/><path fill="#3A506D" d="M191.366 115.284a5.51 5.51 0 110 11.02 5.51 5.51 0 110-11.02z"/><path fill="#213853" fill-rule="nonzero" d="M221.017 111.116a9.642 9.642 0 016.828 2.835h.015a9.649 9.649 0 012.835 6.843 9.652 9.652 0 01-2.835 6.843l-.296.269a9.634 9.634 0 01-13.374-.269h-.016a9.653 9.653 0 01-2.836-6.843 9.65 9.65 0 012.836-6.843l.296-.269a9.63 9.63 0 016.547-2.566z"/><path fill="#3A506D" d="M221.017 115.284a5.51 5.51 0 11-5.511 5.51 5.51 5.51 0 015.511-5.51z"/><path fill="#fff" d="M131.395 180.117c5.614 0 10.164 4.55 10.164 10.163 0 5.615-4.55 10.164-10.164 10.164s-10.164-4.549-10.164-10.164c0-5.613 4.55-10.163 10.164-10.163zM275.757 180.117c5.614 0 10.163 4.55 10.163 10.163 0 5.615-4.549 10.164-10.163 10.164s-10.164-4.549-10.164-10.164c0-5.613 4.55-10.163 10.164-10.163z"/><path fill="#213853" fill-rule="nonzero" d="M172.22 434.377a9.649 9.649 0 016.843 2.835 9.648 9.648 0 012.835 6.842 9.653 9.653 0 01-2.835 6.844 9.653 9.653 0 01-6.843 2.835 9.653 9.653 0 01-6.843-2.835 9.657 9.657 0 01-2.835-6.844 9.653 9.653 0 012.835-6.842 9.652 9.652 0 016.843-2.835z"/><path fill="#3A506D" d="M172.22 438.544a5.51 5.51 0 11.001 11.02 5.51 5.51 0 01-.001-11.02z"/><path fill="#213853" fill-rule="nonzero" d="M241.012 434.377a9.632 9.632 0 016.827 2.835h.016a9.65 9.65 0 012.836 6.842 9.654 9.654 0 01-2.836 6.844l-.296.269a9.633 9.633 0 01-6.547 2.566 9.642 9.642 0 01-6.828-2.835h-.015a9.653 9.653 0 01-2.835-6.844 9.648 9.648 0 012.835-6.842l.296-.269a9.628 9.628 0 016.547-2.566z"/><path fill="#3A506D" d="M241.012 438.544a5.511 5.511 0 110 11.022 5.511 5.511 0 010-11.022z"/></svg>
-  </button>
-</div>
-</div><!-- /pageContent -->
 </body>
 </html>
