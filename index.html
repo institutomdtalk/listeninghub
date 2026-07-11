@@ -548,7 +548,8 @@ function applyFilter(cat) {
   document.querySelectorAll('.cat-tab').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
   filtered = cat === 'all' ? [...allAudios] : allAudios.filter(a => a.category === cat);
   currentIdx = 0;
-  stopAudio();
+  // stop all playing audio
+  Object.values(carrState).forEach(st => { if (st.audio) { st.audio.pause(); st.audio.src=""; } });
   renderCarousel();
 }
 
