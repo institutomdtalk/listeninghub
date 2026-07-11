@@ -94,7 +94,7 @@ body{
 }
 .carousel-wrap{
   position:relative;
-  height:420px;
+  height:680px;
   display:flex;align-items:center;justify-content:center;
   overflow:hidden;
 }
@@ -122,7 +122,7 @@ body{
 }
 .album-card{
   position:absolute;
-  width:260px;
+  width:300px;
   cursor:pointer;
   transition:transform .5s cubic-bezier(.4,0,.2,1),
              opacity .5s cubic-bezier(.4,0,.2,1),
@@ -446,14 +446,142 @@ body{
 @media(max-width:600px){
   .site-header{padding:2rem 1.5rem 1.2rem;}
   .carr-arrow.prev{left:.2rem;} .carr-arrow.next{right:.2rem;}
-  .album-card{width:200px;}
+  .album-card{width:240px;}
   .album-card.state-prev1{transform:translateX(-165px) scale(.75) rotateY(10deg);}
   .album-card.state-next1{transform:translateX(165px) scale(.75) rotateY(-10deg);}
   .album-card.state-prev2{transform:translateX(-280px) scale(.6) rotateY(15deg);}
   .album-card.state-next2{transform:translateX(280px) scale(.6) rotateY(-15deg);}
-  .carousel-wrap{height:360px;}
+  .carousel-wrap{height:560px;}
   .player-panel{padding:0 1rem;}
 }
+
+/* ── PLAYER INSIDE CARD ── */
+.album-player{
+  background:rgba(5,13,26,.85);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  padding:1.1rem 1.2rem .9rem;
+  border-top:1px solid rgba(255,255,255,.08);
+  display:none;
+}
+.audio-card.state-active .album-player{ display:block; }
+
+/* dot indicator */
+.ap-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold);
+  margin:0 auto .6rem;
+  box-shadow:0 0 8px rgba(196,164,90,.6);
+}
+.ap-now{
+  font-size:7.5px;font-weight:600;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--gold);
+  text-align:center;margin-bottom:.55rem;opacity:.8;
+}
+.ap-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem;font-weight:400;
+  color:rgba(255,255,255,.92);text-align:center;
+  line-height:1.25;margin-bottom:.2rem;
+  display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden;
+}
+.ap-cat{
+  font-size:.6rem;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);
+  text-align:center;margin-bottom:.9rem;
+}
+/* progress */
+.ap-bar{
+  position:relative;height:3px;
+  background:rgba(255,255,255,.15);
+  border-radius:100px;cursor:pointer;margin-bottom:.35rem;
+}
+.ap-fill{
+  height:100%;background:var(--gold);
+  border-radius:100px;width:0%;
+  transition:width .1s linear;pointer-events:none;
+}
+.ap-thumb{
+  position:absolute;top:50%;left:0%;
+  transform:translate(-50%,-50%);
+  width:11px;height:11px;
+  background:var(--gold-light);border:2px solid rgba(255,255,255,.9);
+  border-radius:50%;pointer-events:none;
+  opacity:0;transition:opacity .15s;
+}
+.ap-bar:hover .ap-thumb{opacity:1;}
+.ap-times{
+  display:flex;justify-content:space-between;
+  font-size:.6rem;color:var(--muted);
+  letter-spacing:.04em;font-variant-numeric:tabular-nums;
+  margin-bottom:.85rem;
+}
+/* controls */
+.ap-controls{
+  display:flex;align-items:center;justify-content:center;gap:1.2rem;
+  margin-bottom:.75rem;
+}
+.ap-btn-sm{
+  background:none;border:none;cursor:pointer;
+  color:rgba(255,255,255,.45);transition:color .15s,transform .15s;
+  display:flex;align-items:center;
+}
+.ap-btn-sm:hover{color:var(--cream);transform:scale(1.12);}
+.ap-btn-sm svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.ap-btn-play{
+  width:46px;height:46px;border-radius:50%;
+  background:var(--gold);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,transform .15s;
+  box-shadow:0 4px 16px rgba(196,164,90,.4);
+}
+.ap-btn-play:hover{background:var(--gold-light);transform:scale(1.07);}
+.ap-btn-play:active{transform:scale(.94);}
+.ap-btn-play svg{width:18px;height:18px;fill:var(--navy-deep);stroke:none;}
+/* bottom row */
+.ap-bottom{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:.75rem;
+}
+.ap-status{font-size:.6rem;font-style:italic;color:var(--muted);}
+.ap-spd{
+  font-family:'Raleway',sans-serif;font-size:.58rem;font-weight:700;
+  letter-spacing:.1em;color:var(--muted);background:transparent;
+  border:1px solid rgba(255,255,255,.18);border-radius:4px;
+  padding:.1rem .45rem;cursor:pointer;transition:all .15s;
+}
+.ap-spd:hover{border-color:var(--gold);color:var(--gold);}
+/* transcript inside card */
+.ap-tx-toggle{
+  display:flex;align-items:center;justify-content:center;gap:.4rem;
+  background:transparent;
+  border:1px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.45);
+  font-family:'Raleway',sans-serif;
+  font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  padding:.35rem 1rem;border-radius:100px;
+  cursor:pointer;transition:all .2s;width:100%;margin-bottom:.5rem;
+}
+.ap-tx-toggle:hover{border-color:rgba(196,164,90,.4);color:var(--gold);}
+.ap-tx-toggle.open{border-color:rgba(255,255,255,.25);color:var(--cream);}
+.ap-tx-toggle svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2.2;transition:transform .25s;}
+.ap-tx-toggle.open svg{transform:rotate(180deg);}
+.ap-tx-body{display:none;background:rgba(255,255,255,.05);border:1px solid rgba(196,164,90,.15);border-radius:8px;padding:.8rem 1rem;border-left:2px solid var(--gold);margin-bottom:.5rem;max-height:120px;overflow-y:auto;}
+.ap-tx-body.open{display:block;}
+.ap-tx-text{font-size:.7rem;font-weight:300;color:rgba(255,255,255,.68);line-height:1.75;white-space:pre-wrap;}
+/* vocab btn inside card */
+.ap-vocab-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;background:transparent;
+  border:1px solid rgba(196,164,90,.25);
+  color:var(--gold);
+  font-family:'Raleway',sans-serif;
+  font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  padding:.38rem 1rem;border-radius:100px;cursor:pointer;transition:all .2s;
+}
+.ap-vocab-btn:hover{background:rgba(196,164,90,.1);}
+
 </style>
 </head>
 <body>
@@ -623,49 +751,7 @@ function buildCarouselSection(cat, items, carrid) {
     </div>
     <div class="carr-dots" id="dots_${carrid}">${dots}</div>
 
-    <!-- Player panel for this carousel -->
-    <div class="player-panel" id="pp_${carrid}">
-      <p class="now-playing-label">Now Playing</p>
-      <p class="np-title" id="npt_${carrid}">${esc(items[0].title)}</p>
-      <p class="np-cat"  id="npc_${carrid}">${label}</p>
-      <div class="sp-bar-wrap" id="bar_${carrid}" onclick="spSeek(this,'${carrid}')">
-        <div class="sp-bar-fill" id="fill_${carrid}"></div>
-        <div class="sp-bar-thumb" id="thumb_${carrid}"></div>
-      </div>
-      <div class="sp-times">
-        <span id="tcur_${carrid}">0:00</span>
-        <span id="tdur_${carrid}">0:00</span>
-      </div>
-      <div class="sp-controls">
-        <button class="sp-btn-sm" onclick="shift('${carrid}',-1)" title="Previous">
-          <svg viewBox="0 0 24 24"><polygon points="19,20 9,12 19,4"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
-        </button>
-        <button class="sp-btn-play" id="playbtn_${carrid}" onclick="spToggle('${carrid}')" aria-label="Play">
-          <svg class="sp-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-          <svg class="sp-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
-        </button>
-        <button class="sp-btn-sm" onclick="shift('${carrid}',1)" title="Next">
-          <svg viewBox="0 0 24 24"><polygon points="5,4 15,12 5,20"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
-        </button>
-      </div>
-      <div class="sp-meta">
-        <span class="sp-status" id="status_${carrid}">Click play to load</span>
-        <button class="sp-spd" id="spd_${carrid}" onclick="spSpeed('${carrid}')">1×</button>
-      </div>
-    </div>
 
-    <!-- Transcript -->
-    <div class="tx-section">
-      <button class="tx-toggle" id="txtog_${carrid}" onclick="toggleTx('${carrid}')">
-        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-        Transcript
-      </button>
-      <div class="tx-body" id="txbody_${carrid}">
-        <p class="tx-label">Transcript</p>
-        <p class="tx-text" id="txtext_${carrid}">${esc(items[0].transcript||'')}</p>
-      </div>
-      <button class="vocab-trigger" onclick="openVocabModal('${cat}')">Vocabulary AI</button>
-    </div>
   </section>`;
 }
 
@@ -763,6 +849,7 @@ function buildAlbumCard(a, i, carrid) {
   const num = String(i+1).padStart(2,'0');
   const state = i === 0 ? 'state-active' : i === 1 ? 'state-next1' : i === 2 ? 'state-next2' : 'state-hidden';
   const canvasId = 'wv_' + carrid + '_' + i;
+  const playerId = 'ap_' + carrid + '_' + i;
   return `<div class="album-card ${state}" data-idx="${i}" data-carrid="${carrid}" onclick="cardClick('${carrid}',${i})">
     <div class="album-cover">
       <canvas class="album-wavecanvas" id="${canvasId}"></canvas>
@@ -773,6 +860,44 @@ function buildAlbumCard(a, i, carrid) {
     <div class="album-info">
       <p class="album-title">${esc(a.title)}</p>
       ${a.description ? `<p class="album-desc">${esc(a.description)}</p>` : ''}
+    </div>
+    <!-- PLAYER INSIDE CARD -->
+    <div class="album-player" id="${playerId}">
+      <div class="ap-dot"></div>
+      <p class="ap-now">Now Playing</p>
+      <div class="ap-bar" onclick="apSeek(this,'${carrid}')">
+        <div class="ap-fill" id="apfill_${carrid}_${i}"></div>
+        <div class="ap-thumb" id="apthumb_${carrid}_${i}"></div>
+      </div>
+      <div class="ap-times">
+        <span id="apcur_${carrid}_${i}">0:00</span>
+        <span id="apdur_${carrid}_${i}">0:00</span>
+      </div>
+      <div class="ap-controls">
+        <button class="ap-btn-sm" onclick="event.stopPropagation();shift('${carrid}',-1)">
+          <svg viewBox="0 0 24 24"><polygon points="19,20 9,12 19,4"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+        </button>
+        <button class="ap-btn-play" id="applay_${carrid}_${i}" onclick="event.stopPropagation();apToggle('${carrid}',${i})">
+          <svg class="sp-play" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+          <svg class="sp-pause" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        </button>
+        <button class="ap-btn-sm" onclick="event.stopPropagation();shift('${carrid}',1)">
+          <svg viewBox="0 0 24 24"><polygon points="5,4 15,12 5,20"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+        </button>
+      </div>
+      <div class="ap-bottom">
+        <span class="ap-status" id="apstatus_${carrid}_${i}">Click play to load</span>
+        <button class="ap-spd" id="apspd_${carrid}_${i}" onclick="event.stopPropagation();apSpeed('${carrid}',${i})">1×</button>
+      </div>
+      ${a.transcript ? `
+      <button class="ap-tx-toggle" id="aptxtog_${carrid}_${i}" onclick="event.stopPropagation();apToggleTx('${carrid}',${i})">
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        Transcript
+      </button>
+      <div class="ap-tx-body" id="aptxbody_${carrid}_${i}">
+        <p class="ap-tx-text">${esc(a.transcript)}</p>
+      </div>` : ''}
+      <button class="ap-vocab-btn" onclick="event.stopPropagation();openVocabModal('${a.category}')">Vocabulary AI</button>
     </div>
   </div>`;
 }
@@ -847,22 +972,10 @@ function updateCarousel(carrid, newIdx) {
   if (txtog)  { txtog.classList.remove('open'); }
 
   // Reset player if track changed
-  if (st.audio) {
-    st.audio.pause();
-    st.audio.src = '';
-  }
-  st.audio = null;
-  st.loaded = false;
-  st.playing = false;
-  spSyncBtn(carrid, false);
-  const fill  = document.getElementById('fill_'  + carrid);
-  const tcur  = document.getElementById('tcur_'  + carrid);
-  const tdur  = document.getElementById('tdur_'  + carrid);
-  const status= document.getElementById('status_' + carrid);
-  if (fill)   fill.style.width = '0%';
-  if (tcur)   tcur.textContent = '0:00';
-  if (tdur)   tdur.textContent = '0:00';
-  if (status) status.textContent = 'Click play to load';
+  // Pause any playing audio for this carousel
+  Object.keys(apState).filter(k => k.startsWith(carrid)).forEach(k => {
+    if (apState[k] && apState[k].audio) { apState[k].audio.pause(); }
+  });
 }
 
 function shift(carrid, dir) {
@@ -1098,6 +1211,130 @@ function observeReveal() {
   }, {threshold:.05});
   document.querySelectorAll('[data-reveal]').forEach(el => obs.observe(el));
 }
+
+
+/* ══ PLAYER INSIDE CARD ══ */
+const AP_SPEEDS = [1, 1.25, 1.5, 0.75];
+const apState   = {}; // key: carrid_idx
+
+function apKey(carrid, idx) { return carrid + '_' + idx; }
+
+async function apToggle(carrid, idx) {
+  const key    = apKey(carrid, idx);
+  const items  = getItems(carrid);
+  if (!items.length) return;
+  const a      = items[idx];
+  const status = document.getElementById('apstatus_' + key);
+  const playbtn= document.getElementById('applay_'  + key);
+
+  if (!apState[key]) apState[key] = { audio: null, loaded: false, playing: false, speedIdx: 0 };
+  const st = apState[key];
+
+  // pause all other audios
+  Object.keys(apState).forEach(k => {
+    if (k !== key && apState[k].audio && !apState[k].audio.paused) {
+      apState[k].audio.pause();
+      apState[k].playing = false;
+      apSyncBtn(k, false);
+    }
+  });
+
+  if (st.playing && st.audio && !st.audio.paused) {
+    st.audio.pause();
+    st.playing = false;
+    apSyncBtn(key, false);
+    return;
+  }
+
+  if (!st.loaded) {
+    if (status) status.textContent = 'Loading…';
+    if (!st.audio) {
+      st.audio = new Audio();
+      st.audio.addEventListener('timeupdate', () => apUpdate(carrid, idx));
+      st.audio.addEventListener('ended', () => { st.playing = false; apSyncBtn(key, false); });
+      st.audio.addEventListener('error', () => { if (status) status.textContent = 'Error loading audio'; });
+    }
+    try {
+      const res  = await fetch(SHEET_URL + '?type=audioblob&id=' + a.drive_file_id);
+      const json = await res.json();
+      if (json.error) throw new Error(json.error);
+      const bin  = atob(json.b64);
+      const arr  = new Uint8Array(bin.length);
+      for (let i=0;i<bin.length;i++) arr[i]=bin.charCodeAt(i);
+      const blob = new Blob([arr], {type: json.mime||'audio/mpeg'});
+      st.audio.src = URL.createObjectURL(blob);
+      st.loaded = true;
+      const durEl = document.getElementById('apdur_' + key);
+      st.audio.addEventListener('loadedmetadata', () => {
+        if (durEl) durEl.textContent = spFmt(st.audio.duration);
+      });
+    } catch(err) {
+      if (status) status.textContent = 'Error: ' + err.message;
+      return;
+    }
+  }
+
+  try {
+    st.audio.playbackRate = AP_SPEEDS[st.speedIdx || 0];
+    await st.audio.play();
+    st.playing = true;
+    apSyncBtn(key, true);
+    if (status) status.textContent = '';
+  } catch(e) {
+    if (status) status.textContent = 'Playback error';
+  }
+}
+
+function apSyncBtn(key, playing) {
+  const btn = document.getElementById('applay_' + key);
+  if (!btn) return;
+  btn.querySelector('.sp-play').style.display  = playing ? 'none'  : 'block';
+  btn.querySelector('.sp-pause').style.display = playing ? 'block' : 'none';
+}
+
+function apUpdate(carrid, idx) {
+  const key = apKey(carrid, idx);
+  const st  = apState[key];
+  if (!st || !st.audio) return;
+  const pct   = st.audio.duration ? (st.audio.currentTime / st.audio.duration) * 100 : 0;
+  const fill  = document.getElementById('apfill_'  + key);
+  const thumb = document.getElementById('apthumb_' + key);
+  const cur   = document.getElementById('apcur_'   + key);
+  if (fill)  fill.style.width = pct + '%';
+  if (thumb) thumb.style.left = pct + '%';
+  if (cur)   cur.textContent  = spFmt(st.audio.currentTime);
+}
+
+function apSeek(bar, carrid) {
+  const sec = bar.closest('.album-card');
+  if (!sec) return;
+  const idx = parseInt(sec.dataset.idx);
+  const key = apKey(carrid, idx);
+  const st  = apState[key];
+  if (!st || !st.audio || !st.audio.duration) return;
+  const rect = bar.getBoundingClientRect();
+  st.audio.currentTime = ((event.clientX - rect.left) / rect.width) * st.audio.duration;
+}
+
+function apSpeed(carrid, idx) {
+  const key = apKey(carrid, idx);
+  if (!apState[key]) apState[key] = { speedIdx: 0 };
+  const st  = apState[key];
+  st.speedIdx = ((st.speedIdx || 0) + 1) % AP_SPEEDS.length;
+  if (st.audio) st.audio.playbackRate = AP_SPEEDS[st.speedIdx];
+  const btn = document.getElementById('apspd_' + key);
+  if (btn) btn.textContent = AP_SPEEDS[st.speedIdx] + '×';
+}
+
+function apToggleTx(carrid, idx) {
+  const key  = apKey(carrid, idx);
+  const body = document.getElementById('aptxbody_' + key);
+  const tog  = document.getElementById('aptxtog_'  + key);
+  if (!body) return;
+  const open = body.classList.toggle('open');
+  if (tog) tog.classList.toggle('open', open);
+}
+
 
 loadAudios();
 </script>
